@@ -82,5 +82,5 @@ app.put("/api/products/:idProduct", async (req, res) => {
 });
 
 app.listen(8080, () => {
-    console.log("Escuchando en el puerto 8080");
+    console.log("Listening on port 8080");
 });
