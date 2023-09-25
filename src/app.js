@@ -16,8 +16,10 @@ app.get("/api/products", async (req, res) => {
 
 app.get("/api/products/:id", async (req, res) => {
     const { id } = req.params;
+    console.log(id);
     try {
         const product = await manager.getProductById(+id);
+        console.log(product);
         if (!product) {
             return res
                 .status(404)
