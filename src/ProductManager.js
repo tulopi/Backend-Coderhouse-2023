@@ -1,5 +1,5 @@
 import { existsSync, promises } from "fs";
-const path = "productsFile.json";
+const path = "src/ProductsFile.json";
 
 class ProductManager {
     products = [];
