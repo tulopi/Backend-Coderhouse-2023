@@ -3,7 +3,7 @@ const path = "ProductsFile.json";
 
 class ProductManager {
     products = [];
-
+    
     async getProducts() {
         try {
             if (existsSync(path)) {
@@ -19,7 +19,7 @@ class ProductManager {
     async getProductById(id) {
         try {
             const products = await this.getProducts();
-            return products.find((product) => product.id === id);
+            return products.find((product) => product.id == id);
         } catch (error) {
             throw error;
         }

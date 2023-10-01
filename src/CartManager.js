@@ -82,7 +82,6 @@ class CartManager {
             }
             const product = await productManager.getProductById(productId);
             if (!product) {
-                console.log(product, "tulo del futuro cuando leas este console log es que crees que acá esta el error")
                 throw new Error(`Product with ID ${productId} not found`);
             }
             const productIndex = cart.products.findIndex((item) => item.productId === productId);
