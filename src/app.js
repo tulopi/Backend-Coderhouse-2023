@@ -32,6 +32,9 @@ const httpServer = app.listen(port, () => {
     console.log("Listening on port 8080");
 });
 
+
+// websocket
+
 const socketServer = new Server(httpServer);
 
 socketServer.on("connection", (socket) => {
@@ -43,6 +46,7 @@ socketServer.on("connection", (socket) => {
     socket.on("delById", (id) => {
         console.log(id);
         productManager.deleteProduct(id);
-        socketServer.emit("pr")
+        const update = productManager.getProducts();
+        socketServer.emit("productUpdate", update);
     })
 });

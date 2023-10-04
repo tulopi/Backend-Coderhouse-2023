@@ -1,18 +1,20 @@
 const socketClient = io();
 
-document.getElementById("addForm").addEventListener("submit", (add) => {
+const addForm = document.getElementById("addForm");
+const delForm = document.getElementById("delForm");
+
+addForm.addEventListener("submit", (event) => {
     add.preventDefault();
-    const formData = new formData(add.target);
+    const formData = new FormData(event.target);
     const product = {};
     formData.forEach((value, key) => {
         product[key] = value;
     });
-    console.log(product);
     socketClient.emit("addProduct", product);
 });
 
-document.getElementById('delForm').addEventListener('submit', (del) => {
+delForm.addEventListener('submit', (event) => {
     del.preventDefault();
     const productId = document.getElementById('id').value;
-    socket.emit('delByID', productId);
+    socketClient.emit('delByID', productId);
 });
