@@ -40,13 +40,11 @@ const socketServer = new Server(httpServer);
 socketServer.on("connection", (socket) => {
     socket.on("addProduct", (product) => {
         productManager.addProduct(product);
-        const update = productManager.getProducts();
-        socketServer.emit("productUpdate", update);
+        socketServer.emit("productUpdate");
     });
     socket.on("delById", (id) => {
         console.log(id);
         productManager.deleteProduct(id);
-        const update = productManager.getProducts();
-        socketServer.emit("productUpdate", update);
+        socketServer.emit("productUpdate");
     })
 });
