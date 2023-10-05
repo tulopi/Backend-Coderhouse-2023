@@ -24,6 +24,10 @@
                 <label for="description">Description:</label>
                 <input type="text" id="description" name="description" required>
             </div>
+                        <div class="form-group">
+                <label for="thumbnail">Thumbnail:</label>
+                <input type="text" id="thumbnail" name="thumbnail" required>
+            </div>
             <div class="form-group">
                 <label for="price">Price:</label>
                 <input type="number" id="price" name="price" required>
@@ -72,7 +76,5 @@
 </style>
 
 <script src="https://cdn.jsdelivr.net/npm/sweetalert2@11"></script>
-<script src="https://cdn.socket.io/4.6.0/socket.io.min.js"
-    integrity="sha384-c79GN5VsunZvi+Q/WObgk2in0CbZsHnjEqvFxC5DxHn9lTfNce2WW6h2pH6u/kF+"
-    crossorigin="anonymous"></script>
-<script src="../public/js/realTimeProducts.js"></script>
+<script src="/socket.io/socket.io.js"></script>
+<script src="../public/js/index.js"></script>
