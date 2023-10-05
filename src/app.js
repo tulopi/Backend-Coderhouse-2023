@@ -7,7 +7,7 @@ import { __dirname } from "./utils.js";
 import { Server } from "socket.io";
 import { manager as productManager } from "./ProductManager.js";
 
-const port = 3000;
+const port = 8080;
 const app = express();
 
 app.use(express.json())
