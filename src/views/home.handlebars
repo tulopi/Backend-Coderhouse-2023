@@ -1,0 +1,29 @@
+<div class="product-cards">
+    {{#each products}}
+    <div class="card">
+        <h3>{{this.title}}</h3>
+        <p>ID: {{this.id}}</p>
+        <p>Description: {{this.description}}</p>
+        <p>Price: {{this.price}}</p>
+        <p>Thumbnail: {{this.thumbnail}}</p>
+        <p>Code: {{this.code}}</p>
+        <p>Stock: {{this.stock}}</p>
+    </div>
+    {{/each}}
+</div>
+
+<style>
+    .product-cards {
+        display: flex;
+        flex-wrap: wrap;
+        justify-content: space-around;
+    }
+
+    .card {
+        border: 1px solid #ccc;
+        padding: 10px;
+        margin: 10px;
+        width: 300px;
+        box-shadow: 0 4px 8px 0 rgba(0, 0, 0, 0.2);
+    }
+</style>
