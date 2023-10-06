@@ -37,3 +37,7 @@ delForm.onsubmit = (event) => {
     event.preventDefault();
     socketClient.emit('delById', productId);
 };
+
+socketClient.on("productUpdate", () => {
+    location.reload();
+});
