@@ -1,11 +1,12 @@
 import express from "express";
 import productsRouter from "./routes/products.router.js";
-import cartRouter from "./routes/carts.router.js";
+import cartRouter from "./routes/carts.router.js"
 import viewsRouter from "./routes/views.router.js"
 import { engine } from "express-handlebars";
 import { __dirname } from "./utils.js";
 import { Server } from "socket.io";
-import { manager as productManager } from "./ProductManager.js";
+// RealTimeProducts // import { manager as productManager } from "./dao/managersFS/ProductManager.js";
+import "./db/configDB.js";
 
 const port = 8080;
 const app = express();
@@ -33,30 +34,31 @@ const httpServer = app.listen(port, () => {
 
 const socketServer = new Server(httpServer);
 
-socketServer.on("connection", (socket) => {
-    console.log(`Client Connected: ${socket.id}`);
 
-    socket.on("addProduct", (product) => {
-        console.log(product)
-        try {
-            productManager.addProduct(product.title, product.description, product.price, product.thumbnail, product.code, product.stock);
-            socketServer.emit("productUpdate");
-        } catch (error) {
-            console.log(error);
-        }
-    });
 
-    socket.on("delById", (id) => {
-        console.log(id);
-        productManager.deleteProduct(id);
-        socketServer.emit("productUpdate");
-    });
+// Real Time Products //
+// socketServer.on("connection", (socket) => {
+//     console.log(`Client Connected: ${socket.id}`);
 
-    socket.on("disconnect", () => {
-        console.log("Client disconnected");
-    });
+//     socket.on("addProduct", (product) => {
+//         try {
+//             productManager.addProduct(product.title, product.description, product.price, product.thumbnail, product.code, product.stock);
+//             socketServer.emit("productUpdate");
+//         } catch (error) {
+//             console.log(error);
+//         }
+//     });
 
-    socket.on("error", (error) => {
-        console.error("Error WebSocket:", error);
-    });
-});
+//     socket.on("delById", (id) => {
+//         productManager.deleteProduct(id);
+//         socketServer.emit("productUpdate");
+//     });
+
+//     socket.on("disconnect", () => {
+//         console.log("Client disconnected");
+//     });
+
+//     socket.on("error", (error) => {
+//         console.error("Error WebSocket:", error);
+//     });
+// });
