@@ -7,6 +7,7 @@ import { __dirname } from "./utils.js";
 import { Server } from "socket.io";
 // RealTimeProducts // import { manager as productManager } from "./dao/managersFS/ProductManager.js";
 import "./db/configDB.js";
+import socketChatServer from "./listeners/socketChatServer.js";
 
 const port = 8080;
 const app = express();
@@ -33,7 +34,7 @@ const httpServer = app.listen(port, () => {
 });
 
 const socketServer = new Server(httpServer);
-
+socketChatServer(socketServer);
 
 
 // Real Time Products //
