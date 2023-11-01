@@ -16,17 +16,17 @@
                     <p class="card-text">Stock: {{stock}}</p>
                     <p class="card-text">Category: {{category}}</p>
                     <button type="button" class="btn btn-primary" id="details"
-                        onclick="navigateToDetails('{{_id}}')">Ver más</button>
+                        onclick="navigateToDetails('{{_id}}')">See more</button>
                 </div>
             </div>
         </div>
         {{/each}}
     </div>
     <div class="text-center mb-4">
-        <button type="button" class="btn btn-primary" id="prevPage"
-            onclick="navigateToPage({{prevPage}}, 'prev', {{nextPage}})">Previous Page</button>
-        <button type="button" class="btn btn-primary" id="nextPage"
-            onclick="navigateToPage({{nextPage}}, 'next', {{nextPage}})">Next Page</button>
+        <button type="button" class="btn btn-primary" id="prevPage" onclick="navigateToPage('{{object.prevLink}}')">Previous
+            Page</button>
+        <button type="button" class="btn btn-primary" id="nextPage" onclick="navigateToPage('{{object.nextLink}}')">Next
+            Page</button>
     </div>
 </div>
 
@@ -34,14 +34,9 @@
     function navigateToDetails(productId) {
         window.location.href = `http://localhost:8080/api/views/products/${productId}`;
     }
-    function navigateToPage(page, direction, maxPage) {
-        const minPage = 1;
-
-        if (direction === 'prev') {
-            page = Math.max(page, minPage);
-        } else if (direction === 'next') {
-            page = Math.min(page, maxPage);
+    function navigateToPage(page) {
+        if (page) {
+            window.location.href = `http://localhost:8080/api/views${page}`;
         }
-        window.location.href = `http://localhost:8080/api/views/products?limit=9&page=${page}`;
     }
 </script>
