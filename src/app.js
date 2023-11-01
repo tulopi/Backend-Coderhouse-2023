@@ -2,25 +2,34 @@ import express from "express";
 import productsRouter from "./routes/products.router.js";
 import cartRouter from "./routes/carts.router.js"
 import viewsRouter from "./routes/views.router.js"
+import cookieParser from "cookie-parser";
 import { engine } from "express-handlebars";
 import { __dirname } from "./utils.js";
 import { Server } from "socket.io";
 // RealTimeProducts // import { manager as productManager } from "./dao/managersFS/ProductManager.js";
 import "./db/configDB.js";
 import socketChatServer from "./listeners/socketChatServer.js";
+import socketCartServer from "./listeners/socketCartServer.js";
 
 const port = 8080;
 const app = express();
 
-app.use(express.json())
-app.use(express.urlencoded({ extended: true }))
-app.use(express.static(__dirname + '/public'))
+app.use(express.json());
+app.use(express.urlencoded({ extended: true }));
+app.use(express.static(__dirname + '/public'));
+app.use(cookieParser());
 
 // handlebars 
 
-app.engine('handlebars', engine())
-app.set('view engine', 'handlebars')
-app.set('views', __dirname + '/views')
+app.engine('handlebars', engine({
+    defaultLayout: "main",
+    runtimeOptions: {
+        allowProtoPropertiesByDefault: true,
+        allowProtoMethodsByDefault: true,
+    }
+}));
+app.set('view engine', 'handlebars');
+app.set('views', __dirname + '/views');
 
 // routes
 
@@ -35,6 +44,7 @@ const httpServer = app.listen(port, () => {
 
 const socketServer = new Server(httpServer);
 socketChatServer(socketServer);
+socketCartServer(socketServer);
 
 
 // Real Time Products //

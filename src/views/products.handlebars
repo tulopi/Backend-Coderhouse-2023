@@ -1,0 +1,27 @@
+<div class="d-flex justify-content-center align-items-center" style="min-height: 100vh;">
+    <div class="card mt-4" style="width: 24rem;">
+        <img src="https://via.placeholder.com/150" class="card-img-top" alt="Product Thumbnail">
+        <div class="card-body">
+            <p id="product_id" style="display: none;">{{product._id}}</p>
+            <h5 class="card-title">{{product.title}}</h5>
+            <p class="card-text">{{product.description}}</p>
+            <p class="card-text">${{product.price}}</p>
+            <p class="card-text">{{product.code}}</p>
+            <p class="card-text">Stock: {{product.stock}}</p>
+            <p class="card-text">Category: {{product.category}}</p>
+            
+            <div class="input-group mb-3">
+                <input type="number" id="quantity" class="form-control" placeholder="Quantity" min="1">
+                <div class="input-group-append">
+                    <button id="addToCart" type="button" class="btn btn-primary">Add to cart</button>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+
+
+<script type="text/javascript" src="https://cdn.jsdelivr.net/npm/toastify-js"></script>
+<script src="https://cdn.jsdelivr.net/npm/sweetalert2@11"></script>
+<script src="/socket.io/socket.io.js"></script>
+<script src="/js/addProduct.js"></script>

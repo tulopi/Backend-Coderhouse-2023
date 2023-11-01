@@ -4,6 +4,7 @@ const messagesSchema = new Schema({
     email : {
         type:String,
         require:true,
+        unique:true,
     },
     message : {
         type: [String],

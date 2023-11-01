@@ -1,29 +1,47 @@
-<div class="product-cards">
-    {{#each products}}
-    <div class="card">
-        <h3>{{title}}</h3>
-        <p>ID: {{_id}}</p>
-        <p>Description: {{description}}</p>
-        <p>Price: {{price}}</p>
-        <p>Thumbnail: {{thumbnail}}</p>
-        <p>Code: {{code}}</p>
-        <p>Stock: {{stock}}</p>
+<div class="product-cards container">
+    <div class="row">
+        {{#each object.payload}}
+        <div class="col-lg-4 col-md-6 mb-4 mt-4">
+            <div class="card">
+                {{#if thumbnail}}
+                <img src="{{thumbnail}}" class="card-img-top" alt="Product Thumbnail">
+                {{else}}
+                <img src="https://via.placeholder.com/150" class="card-img-top" alt="Placeholder Thumbnail">
+                {{/if}}
+                <div class="card-body">
+                    <h5 class="card-title">{{title}}</h5>
+                    <p class="card-text">Description: {{description}}</p>
+                    <p class="card-text">Price: {{price}}</p>
+                    <p class="card-text">Code: {{code}}</p>
+                    <p class="card-text">Stock: {{stock}}</p>
+                    <p class="card-text">Category: {{category}}</p>
+                    <button type="button" class="btn btn-primary" id="details"
+                        onclick="navigateToDetails('{{_id}}')">Ver más</button>
+                </div>
+            </div>
+        </div>
+        {{/each}}
     </div>
-    {{/each}}
+    <div class="text-center mb-4">
+        <button type="button" class="btn btn-primary" id="prevPage"
+            onclick="navigateToPage({{prevPage}}, 'prev', {{nextPage}})">Previous Page</button>
+        <button type="button" class="btn btn-primary" id="nextPage"
+            onclick="navigateToPage({{nextPage}}, 'next', {{nextPage}})">Next Page</button>
+    </div>
 </div>
 
-<style>
-    .product-cards {
-        display: flex;
-        flex-wrap: wrap;
-        justify-content: space-around;
+<script>
+    function navigateToDetails(productId) {
+        window.location.href = `http://localhost:8080/api/views/products/${productId}`;
     }
+    function navigateToPage(page, direction, maxPage) {
+        const minPage = 1;
 
-    .card {
-        border: 1px solid #ccc;
-        padding: 10px;
-        margin: 10px;
-        width: 300px;
-        box-shadow: 0 4px 8px 0 rgba(0, 0, 0, 0.2);
+        if (direction === 'prev') {
+            page = Math.max(page, minPage);
+        } else if (direction === 'next') {
+            page = Math.min(page, maxPage);
+        }
+        window.location.href = `http://localhost:8080/api/views/products?limit=9&page=${page}`;
     }
-</style>
+</script>
