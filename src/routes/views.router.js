@@ -11,9 +11,8 @@ router.get("/products", async (req, res) => {
         const object = await productManager.findAll({
             limit: req.query.limit,
             page: req.query.page,
-            sortField: req.query.sort
+            sortField: req.query.sort,
         });
-        console.log(object);
         res.render("home", { object });
     } catch (error) {
         res.status(404).json({ message: error.message });
