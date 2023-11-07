@@ -1,6 +1,8 @@
 <div class="user-info text-center">
     {{#if user.first_name}}
-        <h2 class="mt-4">Welcome, {{user.first_name}}</h2>
+        <h2 class="mt-4">Welcome {{user.first_name}}</h2>
+        <br>
+        <a href="http://localhost:8080/profile" class="btn btn-primary btn-sm">Profile</a>
     {{/if}}
 </div>
 
