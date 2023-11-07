@@ -3,21 +3,37 @@ import productsRouter from "./routes/products.router.js";
 import cartRouter from "./routes/carts.router.js"
 import viewsRouter from "./routes/views.router.js"
 import cookieParser from "cookie-parser";
+import sessionsRouter from "./routes/sessions.router.js"
 import { engine } from "express-handlebars";
 import { __dirname } from "./utils.js";
 import { Server } from "socket.io";
+import session from "express-session";
 // RealTimeProducts // import { manager as productManager } from "./dao/managersFS/ProductManager.js";
 import "./db/configDB.js";
 import socketChatServer from "./listeners/socketChatServer.js";
 import socketCartServer from "./listeners/socketCartServer.js";
+import MongoStore from "connect-mongo";
 
 const port = 8080;
 const app = express();
+const URI = "mongodb+srv://tulonv:NdxkT2wswrH7xIBU@cluster0.1rcs8eo.mongodb.net/ecommerce?retryWrites=true&w=majority";
+
 
 app.use(express.json());
 app.use(express.urlencoded({ extended: true }));
 app.use(express.static(__dirname + '/public'));
+app.use(
+    session({
+        store: new MongoStore({
+            mongoUrl: URI,
+        }),
+        secret: "secretSession",
+        cookie: { maxAge: 60000},
+    })
+)
 app.use(cookieParser());
+
+// session
 
 // handlebars 
 
@@ -33,9 +49,10 @@ app.set('views', __dirname + '/views');
 
 // routes
 
-app.use("/api/views", viewsRouter);
+app.use("/", viewsRouter);
 app.use("/api/products", productsRouter);
 app.use("/api/carts", cartRouter);
+app.use("/api/sessions", sessionsRouter)
 
 
 const httpServer = app.listen(port, () => {
