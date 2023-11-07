@@ -28,7 +28,7 @@ app.use(
             mongoUrl: URI,
         }),
         secret: "secretSession",
-        cookie: { maxAge: 60000},
+        cookie: { maxAge: 100000},
     })
 )
 app.use(cookieParser());
