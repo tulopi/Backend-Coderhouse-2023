@@ -5,7 +5,7 @@
 - [Página de Inicio](http://localhost:8080/products): Saluda al usuario si hay una sesión activa.
 - [Registro de Cuenta](http://localhost:8080/signup): Crea una cuenta nueva.
 - [Inicio de Sesión](http://localhost:8080/login): Inicia sesión.
-- [Perfil de Usuario](http://localhost:8080/profile): Visualiza tu perfil.
+- [Perfil de Usuario](http://localhost:8080/profile): Visualiza tu perfil, por default te enviará a login si no estas logeado.
 
 ## Uso
 
