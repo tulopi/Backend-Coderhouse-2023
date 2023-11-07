@@ -8,12 +8,13 @@ router.get("/products", async (req, res) => {
     try {
         const sortParam = req.query.sort;
         const query = await productManager.getSortedQuery(sortParam);
+        const user = req.session.user;
         const object = await productManager.findAll({
             limit: req.query.limit,
             page: req.query.page,
             sortField: req.query.sort,
         });
-        res.render("home", { object });
+        res.render("home", { object, user });
     } catch (error) {
         res.status(404).json({ message: error.message });
     }
@@ -25,7 +26,7 @@ router.get("/products/:pid", async (req, res) => {
         const product = await productManager.findById(pid);
         if (!product) {
             return res.status(404).json({ message: "Product not found" });
-        } 
+        }
         res.render("products", { product });
     } catch (error) {
         res.status(500).json(message.error)
@@ -48,6 +49,31 @@ router.get("/carts/:cid", async (req, res) => {
         res.status(500).json({ message: error.message });
     }
 });
+
+router.get("/login", (req, res) => {
+    if (req.session.user) {
+        return res.redirect("/products");
+    }
+    res.render("login");
+});
+
+router.get("/signup", (req, res) => {
+    if (req.session.user) {
+        return res.redirect("/products");
+    }
+    res.render("signup");
+});
+
+router.get("/profile", (req, res) => {
+    if (!req.session.user) {
+        return res.redirect("/login");
+    }
+    res.render("profile", { user: req.session.user });
+});
+
+router.get("/restore", (req, res) => {
+    res.render("restore", { user: req.session.user })
+})
 
 // RealTimeProducts //
 // router.get("/realTimeProducts", async (req, res) => {

@@ -1,3 +1,9 @@
+<div class="user-info text-center">
+    {{#if user.first_name}}
+        <h2 class="mt-4">Welcome, {{user.first_name}}</h2>
+    {{/if}}
+</div>
+
 <div class="product-cards container">
     <div class="row">
         {{#each object.payload}}
@@ -32,11 +38,11 @@
 
 <script>
     function navigateToDetails(productId) {
-        window.location.href = `http://localhost:8080/api/views/products/${productId}`;
+        window.location.href = `http://localhost:8080/products/${productId}`;
     }
     function navigateToPage(page) {
         if (page) {
-            window.location.href = `http://localhost:8080/api/views${page}`;
+            window.location.href = `http://localhost:8080${page}`;
         }
     }
 </script>
