@@ -72,10 +72,9 @@ passport.use(
         async (accessToken, refreshToken, profile, done) => {
             try {
                 const userDB = await userManager.findByEmail(profile._json.email);
-                console.log("Usuario encontrado en la base de datos:", userDB);
                 // Login
                 if (userDB) {
-                    if (userDB.isGithub) {
+                    if (userDB.isGitHub) {
                         return done(null, userDB);
                     } else {
                         return done(null, false);
@@ -87,7 +86,7 @@ passport.use(
                     last_name: profile._json.name.split(" ")[1],
                     email: profile._json.email,
                     password: " ",
-                    isGithub: null,
+                    isGitHub: true,
                 };
                 const createdUser = await userManager.createOne(infoUser);
                 done(null, createdUser);

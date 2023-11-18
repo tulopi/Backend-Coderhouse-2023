@@ -8,7 +8,7 @@ router.get("/products", async (req, res) => {
     try {
         const sortParam = req.query.sort;
         const query = await productManager.getSortedQuery(sortParam);
-        const user = req.session.user;
+        const user = req.user;
         const object = await productManager.findAll({
             limit: req.query.limit,
             page: req.query.page,
