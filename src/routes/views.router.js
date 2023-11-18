@@ -51,29 +51,35 @@ router.get("/carts/:cid", async (req, res) => {
 });
 
 router.get("/login", (req, res) => {
-    if (req.session.user) {
-        return res.redirect("/products");
+    if (req.session.passport?.user) {
+        return res.redirect("/profile");
     }
     res.render("login");
 });
 
 router.get("/signup", (req, res) => {
     if (req.session.user) {
-        return res.redirect("/products");
+        return res.redirect("/profile");
     }
     res.render("signup");
 });
 
+
 router.get("/profile", (req, res) => {
-    if (!req.session.user) {
+    if (!req.session.passport) {
         return res.redirect("/login");
     }
-    res.render("profile", { user: req.session.user });
+    const { first_name, email } = req.user;
+    res.render("profile", { user: { first_name, email } });
 });
 
 router.get("/restore", (req, res) => {
-    res.render("restore", { user: req.session.user })
+    res.render("restore");
 })
+
+router.get("/error", (req, res) => {
+    res.render("error");
+});
 
 // RealTimeProducts //
 // router.get("/realTimeProducts", async (req, res) => {

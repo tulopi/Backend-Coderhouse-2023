@@ -13,6 +13,8 @@ import "./db/configDB.js";
 import socketChatServer from "./listeners/socketChatServer.js";
 import socketCartServer from "./listeners/socketCartServer.js";
 import MongoStore from "connect-mongo";
+import "./passport.js";
+import passport from "passport";
 
 const port = 8080;
 const app = express();
@@ -22,19 +24,26 @@ const URI = "mongodb+srv://tulonv:NdxkT2wswrH7xIBU@cluster0.1rcs8eo.mongodb.net/
 app.use(express.json());
 app.use(express.urlencoded({ extended: true }));
 app.use(express.static(__dirname + '/public'));
+app.use(cookieParser());
+
+
+
+// session
 app.use(
     session({
         store: new MongoStore({
             mongoUrl: URI,
         }),
         secret: "secretSession",
-        cookie: { maxAge: 100000},
+        cookie: { maxAge: 6000000},
     })
-)
-app.use(cookieParser());
-
-// session
-
+    )
+    
+    
+    // passport
+    app.use(passport.initialize());
+    app.use(passport.session());
+    
 // handlebars 
 
 app.engine('handlebars', engine({
