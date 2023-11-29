@@ -2,7 +2,7 @@ import passport from "passport";
 import { userManager } from "./dao/managersDB/userManager.js";
 import { Strategy as LocalStrategy } from "passport-local";
 import { Strategy as GithubStrategy } from "passport-github2";
-import { hashData , compareData } from "./utils.js";
+import { hashData, compareData } from "./utils.js";
 import { userModel } from "./db/models/user.model.js";
 
 // local
@@ -71,28 +71,37 @@ passport.use(
         },
         async (accessToken, refreshToken, profile, done) => {
             try {
-                const userDB = await userManager.findByEmail(profile._json.email);
-                // Login
-                if (userDB) {
-                    if (userDB.isGitHub) {
-                        return done(null, userDB);
-                    } else {
-                        return done(null, false);
+                if (
+                    profile._json &&
+                    profile._json.email &&
+                    profile._json.name &&
+                    profile._json.name.includes(" ")
+                ) {
+                    const nameParts = profile._json.name.split(" ");
+                    const infoUser = {
+                        first_name: nameParts[0],
+                        last_name: nameParts.slice(1).join(" "),
+                        email: profile._json.email,
+                        password: " ",
+                        isGitHub: true,
+                    };
+                    const userDB = await userManager.findByEmail(profile._json.email);
+                    if (userDB) {
+                        if (userDB.isGitHub) {
+                            return done(null, userDB);
+                        } else {
+                            return done(null, false);
+                        }
                     }
+                    const createdUser = await userManager.createOne(infoUser);
+                    return done(null, createdUser);
+                } else {
+                    console.error("Invalid profile data:", profile._json);
+                    return done(null, false);
                 }
-                // Signup
-                const infoUser = {
-                    first_name: profile._json.name.split(" ")[0],
-                    last_name: profile._json.name.split(" ")[1],
-                    email: profile._json.email,
-                    password: " ",
-                    isGitHub: true,
-                };
-                const createdUser = await userManager.createOne(infoUser);
-                done(null, createdUser);
             } catch (error) {
                 console.error("Error in passport github strategy", error);
-                done(error);
+                return done(error);
             }
         }
     )

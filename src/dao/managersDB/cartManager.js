@@ -15,41 +15,29 @@ class CartManager {
     async updateProductQuantity(id, productId, quantity) {
         try {
             const cart = await cartModel.findById(id);
-            if (!cart) {
-                throw new Error("Cart not found");
-            }
+            if (!cart) throw new Error("Cart not found");
             const productIndex = cart.products.findIndex(item => item.productId.toString() === productId);
-            if (productIndex === -1) {
-                throw new Error("Product not found in the cart");
-            }
+            if (productIndex === -1) throw new Error("Product not found in the cart");
             cart.products[productIndex].quantity = quantity;
             const updatedCart = await cart.save();
             return updatedCart;
         } catch (error) {
             throw error;
         }
-    }
+    };
 
     async addProductToCart(cartId, productId, quantity) {
         try {
             const cart = await cartModel.findById(cartId);
-            if (!cart) {
-                throw new Error("Cart not found");
-            }
+            if (!cart) throw new Error("Cart not found")
             const productIndex = cart.products.findIndex(item => item.productId.toString() === productId);
             if (productIndex === -1) {
                 const product = await productsModel.findById(productId);
-                if (!product) {
-                    throw new Error("Product not found");
-                }
-                if (quantity <= 0) {
-                    throw new Error("Quantity must be greater than 0");
-                }
+                if (!product) throw new Error("Product not found");
+                if (quantity <= 0) throw new Error("Quantity must be greater than 0");
                 cart.products.push({ productId, quantity });
             } else {
-                if (quantity <= 0) {
-                    throw new Error("Quantity must be greater than 0");
-                }
+                if (quantity <= 0) throw new Error("Quantity must be greater than 0");
                 cart.products[productIndex].quantity += quantity;
             }
             const updatedCart = await cart.save();
@@ -57,9 +45,8 @@ class CartManager {
         } catch (error) {
             throw error;
         }
-    }
-
-
+    };
+    
     async createCart(body) {
         try {
             const { product, id, quantity = 1 } = body;
