@@ -35,15 +35,15 @@ app.use(
             mongoUrl: URI,
         }),
         secret: "secretSession",
-        cookie: { maxAge: 6000000},
+        cookie: { maxAge: 6000000 },
     })
-    )
-    
-    
-    // passport
-    app.use(passport.initialize());
-    app.use(passport.session());
-    
+)
+
+
+// passport
+app.use(passport.initialize());
+app.use(passport.session());
+
 // handlebars 
 
 app.engine('handlebars', engine({

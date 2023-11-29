@@ -33,6 +33,7 @@ router.get("/", async (req, res) => {
             }
         });
 
+
         router.post("/", async (req, res) => {
             try {
                 const createdProduct = await productManager.createOne(req.body);
