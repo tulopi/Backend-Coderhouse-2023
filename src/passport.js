@@ -73,10 +73,13 @@ passport.use(
             try {
                 if (
                     profile._json &&
-                    profile._json.email &&
+                    profile.emails[0].value &&
                     profile._json.name &&
                     profile._json.name.includes(" ")
                 ) {
+                    console.log(
+                    profile
+                    );
                     const nameParts = profile._json.name.split(" ");
                     const infoUser = {
                         first_name: nameParts[0],
@@ -96,7 +99,7 @@ passport.use(
                     const createdUser = await userManager.createOne(infoUser);
                     return done(null, createdUser);
                 } else {
-                    console.error("Invalid profile data:", profile._json);
+                    console.error("Set github email or name public in your configuration:", profile.emails[0].value , profile._json);
                     return done(null, false);
                 }
             } catch (error) {
