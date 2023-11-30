@@ -73,7 +73,7 @@ passport.use(
             try {
                 if (
                     profile._json &&
-                    profile._json.email &&
+                    profile.emails[0].value &&
                     profile._json.name &&
                     profile._json.name.includes(" ")
                 ) {
