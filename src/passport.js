@@ -81,11 +81,11 @@ passport.use(
                     const infoUser = {
                         first_name: nameParts[0],
                         last_name: nameParts.slice(1).join(" "),
-                        email: profile._json.email,
+                        email: profile.emails[0].value,
                         password: " ",
                         isGitHub: true,
                     };
-                    const userDB = await userManager.findByEmail(profile._json.email);
+                    const userDB = await userManager.findByEmail(profile.emails[0].value);
                     if (userDB) {
                         if (userDB.isGitHub) {
                             return done(null, userDB);
