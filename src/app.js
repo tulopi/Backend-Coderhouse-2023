@@ -4,6 +4,7 @@ import cartRouter from "./routes/carts.router.js"
 import viewsRouter from "./routes/views.router.js"
 import cookieParser from "cookie-parser";
 import sessionsRouter from "./routes/sessions.router.js"
+import usersRouter from "./routes/users.router.js"
 import { engine } from "express-handlebars";
 import { __dirname } from "./utils.js";
 import { Server } from "socket.io";
@@ -61,7 +62,8 @@ app.set('views', __dirname + '/views');
 app.use("/", viewsRouter);
 app.use("/api/products", productsRouter);
 app.use("/api/carts", cartRouter);
-app.use("/api/sessions", sessionsRouter)
+app.use("/api/sessions", sessionsRouter);
+app.use("/api/users", usersRouter);
 
 
 const httpServer = app.listen(port, () => {

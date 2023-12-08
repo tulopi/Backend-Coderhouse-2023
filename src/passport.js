@@ -2,8 +2,10 @@ import passport from "passport";
 import { userManager } from "./dao/managersDB/userManager.js";
 import { Strategy as LocalStrategy } from "passport-local";
 import { Strategy as GithubStrategy } from "passport-github2";
+import { ExtractJwt, Strategy as JWTStrategy } from "passport-jwt";
 import { hashData, compareData } from "./utils.js";
 import { userModel } from "./db/models/user.model.js";
+const SECRETJWT = "jwtSecret";
 
 // local
 passport.use(
@@ -39,16 +41,16 @@ passport.use(
         { usernameField: "email" },
         async (email, password, done) => {
             if (!email || !password) {
-                done(null, false)
+                return done(null, false)
             }
             try {
                 const user = await userManager.findByEmail(email);
                 if (!user) {
-                    done(null, false);
+                    done(null, false, { message: "Incorrect email or password." });
                 }
                 const isPasswordValid = await compareData(password, user.password);
                 if (!isPasswordValid) {
-                    return done(null, false);
+                    return done(null, false, { message: "Incorrect email or password." });
                 }
                 return done(null, user);
             } catch (error) {
@@ -77,9 +79,6 @@ passport.use(
                     profile._json.name &&
                     profile._json.name.includes(" ")
                 ) {
-                    console.log(
-                    profile
-                    );
                     const nameParts = profile._json.name.split(" ");
                     const infoUser = {
                         first_name: nameParts[0],
@@ -99,7 +98,7 @@ passport.use(
                     const createdUser = await userManager.createOne(infoUser);
                     return done(null, createdUser);
                 } else {
-                    console.error("Set github email or name public in your configuration:", profile.emails[0].value , profile._json);
+                    console.error("Set github email or name public in your configuration:", profile.emails[0].value, profile._json.name);
                     return done(null, false);
                 }
             } catch (error) {
@@ -110,8 +109,30 @@ passport.use(
     )
 );
 
+// JWT Strategy
+
+const fromCookies = (req) => {
+    return req.cookies.token;
+}
+
+passport.use(
+    "jwt",
+    new JWTStrategy(
+        {
+            jwtFromRequest: ExtractJwt.fromExtractors([fromCookies]),
+            secretOrKey: SECRETJWT,
+        },
+        async function (jwtPayload, done) {
+            done(null, jwtPayload);
+        }
+    )
+);
+
+
+
+// Serialize & Deserialize
+
 passport.serializeUser((user, done) => {
-    console.log("Serializando usuario");
     done(null, user._id);
 });
 

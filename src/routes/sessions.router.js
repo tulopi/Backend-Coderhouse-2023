@@ -1,6 +1,7 @@
 import { Router } from "express";
 import { userManager } from "../dao/managersDB/userManager.js";
 import { hashData, compareData } from "../utils.js";
+import { generateToken } from "../utils.js";
 import passport from "passport";
 
 const router = Router();
@@ -21,28 +22,41 @@ router.post(
     }
 );
 
-router.post(
-    "/login",
-    async (req, res, next) => {
+router.post("/login", async (req, res, next) => {
+    passport.authenticate("login", { session: false }, async (err, user, info) => {
         try {
-            passport.authenticate("login", {
-                successRedirect: "/profile",
-                failureRedirect: "/error",
-            })(req, res, next);
-        }
-        catch (error) {
+            if (err || !user) {
+                return res.status(401).json({ message: "Authentication failed" });
+            }
+            req.login(user, { session: false }, async (error) => {
+                if (error) {
+                    return next(error);
+                }
+                console.log(user);
+                const { first_name, last_name, role, _id } = user;
+                const token = generateToken({ first_name, last_name, role, _id: _id.toString() });
+                res.status(200)
+                    .cookie("token", token, { httpOnly: true })
+                    .json({ token })
+            });
+        } catch (error) {
             res.status(500).json({ message: "Error during login: " + error.message });
         }
-    }
-);
+    })(req, res, next);
+});
 
-// github 
+
+// github
 
 router.get("/auth/github", passport.authenticate("github", { scope: ["user:email"] }));
 
 
 router.get("/callback", passport.authenticate("github", { failureRedirect: "/error" }), (req, res) => {
-    res.redirect("/profile");
+    const { first_name, last_name, role, _id } = req.user;
+    const token = generateToken({ first_name, last_name, role, _id: _id.toString() });
+    res.status(200)
+        .cookie("token", token, { httpOnly: true })
+        .json({ token });
 });
 
 router.get("/signout", (req, res) => {
@@ -50,6 +64,7 @@ router.get("/signout", (req, res) => {
         res.redirect("/login");
     });
 });
+
 router.post("/restore", async (req, res) => {
     const { email, password } = req.body;
     try {

@@ -9,6 +9,10 @@ const userSchema = new Schema({
         type: String,
         required: true
     },
+    age: {
+        type: Number,
+        default: null
+    },
     email:{
         type: String,
         required: true,
@@ -19,11 +23,16 @@ const userSchema = new Schema({
     },
     role: {
         type: String,
+        enum: ["admin", "user"],
         default: "user"
     },
     isGitHub: {
         type: Boolean,
-        default: false,
+        default: false
+    },
+    isGoogle: {
+        type: Boolean,
+        default: false
     }
 });
 

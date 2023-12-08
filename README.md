@@ -1,15 +1,15 @@
 # Endpoints para la Entrega
 
-Este proyecto ofrece dos endpoints principales para la autenticación de usuarios utilizando diferentes estrategias.
+Realizar login en el primer endpoint para generar un token y luego acceder a los datos del token desde el segundo endpoint.
 
 ## Endpoints
 
-### Registro de Usuario
-
-- **Endpoint:** `http://localhost:8080/signup`
-- **Descripción:** Implementación de registro de usuario utilizando métodos local y github strategy.
-
-### Inicio de Sesión de Usuario
+### Login de usuario
 
 - **Endpoint:** `http://localhost:8080/login`
-- **Descripción:** Implementación de inicio de sesión utilizando métodos local y github strategy.
+- **Descripción:** Se puede ingresar utilizando local strategy o github lo cual generara un token.
+
+### Login de usuario
+
+- **Endpoint:**  `http://localhost:8080/api/users/current`
+- **Descripción:** Accediendo al endpoints current se podrá obtener los datos del usuario.

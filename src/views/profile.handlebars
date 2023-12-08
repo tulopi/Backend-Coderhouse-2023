@@ -8,3 +8,10 @@
         <button class="btn btn-primary" onclick="window.location.href = 'api/sessions/signout'">Sign out</button>
     </div>
 </div>
+
+<script>
+    const token = token;
+    if (token) {
+        window.location.href = "/profile"
+    }
+</script>
