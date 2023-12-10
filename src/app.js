@@ -10,6 +10,7 @@ import { __dirname } from "./utils.js";
 import { Server } from "socket.io";
 import session from "express-session";
 // RealTimeProducts // import { manager as productManager } from "./dao/managersFS/ProductManager.js";
+import config from "./config.js";
 import "./db/configDB.js";
 import socketChatServer from "./listeners/socketChatServer.js";
 import socketCartServer from "./listeners/socketCartServer.js";
@@ -17,10 +18,11 @@ import MongoStore from "connect-mongo";
 import "./passport.js";
 import passport from "passport";
 
-const port = 8080;
-const app = express();
-const URI = "mongodb+srv://tulonv:NdxkT2wswrH7xIBU@cluster0.1rcs8eo.mongodb.net/ecommerce?retryWrites=true&w=majority";
 
+const app = express();
+
+const port = parseInt(config.port);
+const MONGODB_URI = config.mongoUrl;
 
 app.use(express.json());
 app.use(express.urlencoded({ extended: true }));
@@ -33,7 +35,7 @@ app.use(cookieParser());
 app.use(
     session({
         store: new MongoStore({
-            mongoUrl: URI,
+            mongoUrl:MONGODB_URI,
         }),
         secret: "secretSession",
         cookie: { maxAge: 6000000 },
