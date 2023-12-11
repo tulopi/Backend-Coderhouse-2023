@@ -1,54 +1,49 @@
 import express from "express";
-import productsRouter from "./routes/products.router.js";
-import cartRouter from "./routes/carts.router.js"
-import viewsRouter from "./routes/views.router.js"
 import cookieParser from "cookie-parser";
-import sessionsRouter from "./routes/sessions.router.js"
-import usersRouter from "./routes/users.router.js"
-import { engine } from "express-handlebars";
-import { __dirname } from "./utils.js";
-import { Server } from "socket.io";
 import session from "express-session";
-// RealTimeProducts // import { manager as productManager } from "./dao/managersFS/ProductManager.js";
-import config from "./config.js";
-import "./db/configDB.js";
-import socketChatServer from "./listeners/socketChatServer.js";
-import socketCartServer from "./listeners/socketCartServer.js";
-import MongoStore from "connect-mongo";
-import "./passport.js";
 import passport from "passport";
-
+import { engine } from "express-handlebars";
+import { Server } from "socket.io";
+import MongoStore from "connect-mongo";
+import config from "./config/config.js";
+import "./config/db/configDB.js";
+import "./config/passport.js";
+import { __dirname } from "./utils/utils.js";
+import productsRouter from "./routes/products.router.js";
+import cartRouter from "./routes/cart.router.js";
+import viewsRouter from "./routes/views.router.js";
+import sessionsRouter from "./routes/sessions.router.js";
+import usersRouter from "./routes/users.router.js";
+import socketChatServer from "./listeners/socket.ChatServer.js";
+import socketCartServer from "./listeners/socket.CartServer.js";
 
 const app = express();
-
 const port = parseInt(config.port);
 const MONGODB_URI = config.mongoUrl;
+const SECRET_SESSION = config.secret_session;
 
+// Middlewares
 app.use(express.json());
 app.use(express.urlencoded({ extended: true }));
 app.use(express.static(__dirname + '/public'));
 app.use(cookieParser());
 
-
-
-// session
+// Session setup
 app.use(
     session({
         store: new MongoStore({
-            mongoUrl:MONGODB_URI,
+            mongoUrl: MONGODB_URI,
         }),
-        secret: "secretSession",
+        secret: SECRET_SESSION,
         cookie: { maxAge: 6000000 },
     })
-)
+);
 
-
-// passport
+// Passport initialization
 app.use(passport.initialize());
 app.use(passport.session());
 
-// handlebars 
-
+// Handlebars setup
 app.engine('handlebars', engine({
     defaultLayout: "main",
     runtimeOptions: {
@@ -59,47 +54,19 @@ app.engine('handlebars', engine({
 app.set('view engine', 'handlebars');
 app.set('views', __dirname + '/views');
 
-// routes
-
+// Routes
 app.use("/", viewsRouter);
 app.use("/api/products", productsRouter);
 app.use("/api/carts", cartRouter);
 app.use("/api/sessions", sessionsRouter);
 app.use("/api/users", usersRouter);
 
-
+// Server setup
 const httpServer = app.listen(port, () => {
-    console.log("Listening on port 8080");
+    console.log(`Listening on port ${port}`);
 });
 
+// Socket setup
 const socketServer = new Server(httpServer);
 socketChatServer(socketServer);
 socketCartServer(socketServer);
-
-
-// Real Time Products //
-// socketServer.on("connection", (socket) => {
-//     console.log(`Client Connected: ${socket.id}`);
-
-//     socket.on("addProduct", (product) => {
-//         try {
-//             productManager.addProduct(product.title, product.description, product.price, product.thumbnail, product.code, product.stock);
-//             socketServer.emit("productUpdate");
-//         } catch (error) {
-//             console.log(error);
-//         }
-//     });
-
-//     socket.on("delById", (id) => {
-//         productManager.deleteProduct(id);
-//         socketServer.emit("productUpdate");
-//     });
-
-//     socket.on("disconnect", () => {
-//         console.log("Client disconnected");
-//     });
-
-//     socket.on("error", (error) => {
-//         console.error("Error WebSocket:", error);
-//     });
-// });

@@ -1,9 +1,9 @@
 import passport from "passport";
-import { userManager } from "./dao/managersDB/userManager.js";
+import { userServices } from "../services/user.services.js";
 import { Strategy as LocalStrategy } from "passport-local";
 import { Strategy as GithubStrategy } from "passport-github2";
 import { ExtractJwt, Strategy as JWTStrategy } from "passport-jwt";
-import { hashData, compareData } from "./utils.js";
+import { hashData, compareData } from "../utils/utils.js";
 import config from "./config.js";
 
 // local
@@ -16,13 +16,13 @@ passport.use(
             if (!first_name || !last_name || !email || !password) {
                 return done(null, false);
             }
-            const existingUser = await userManager.findByEmail(email);
+            const existingUser = await userServices.findByEmail(email);
             if (existingUser) {
                 return done(null, false, { message: "Email is already registered" });
             }
             try {
                 const hashedPassword = await hashData(password);
-                const createdUser = await userManager.createOne({
+                const createdUser = await userServices.createOne({
                     ...req.body,
                     password: hashedPassword
                 })
@@ -43,7 +43,7 @@ passport.use(
                 return done(null, false)
             }
             try {
-                const user = await userManager.findByEmail(email);
+                const user = await userServices.findByEmail(email);
                 if (!user) {
                     done(null, false, { message: "Incorrect email or password." });
                 }
@@ -86,7 +86,7 @@ passport.use(
                         password: " ",
                         isGitHub: true,
                     };
-                    const userDB = await userManager.findByEmail(profile.emails[0].value);
+                    const userDB = await userServices.findByEmail(profile.emails[0].value);
                     if (userDB) {
                         if (userDB.isGitHub) {
                             return done(null, userDB);
@@ -94,7 +94,7 @@ passport.use(
                             return done(null, false);
                         }
                     }
-                    const createdUser = await userManager.createOne(infoUser);
+                    const createdUser = await userServices.createOne(infoUser);
                     return done(null, createdUser);
                 } else {
                     console.error("Set github email or name public in your configuration:", profile.emails[0].value, profile._json.name);
@@ -137,7 +137,7 @@ passport.serializeUser((user, done) => {
 
 passport.deserializeUser(async (id, done) => {
     try {
-        const user = await userManager.findById(id);
+        const user = await userServices.findById(id);
         done(null, user);
     } catch (error) {
         done(error);

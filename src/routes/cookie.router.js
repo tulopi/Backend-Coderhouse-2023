@@ -1,16 +1,9 @@
 import { Router } from "express";
+import { cookieController } from "../controllers/db.controllers/cookie.controller";
 
 const router = Router();
 
-router.post("/", (req, res) => {
-    const { name, email} = req.body;
-    req.session.name = name;
-    req.session.email = email;
-    res.send("session");
-});
-
-router.get("/view", (req, res) => {
-    res.send("View cookie");
-});
+router.post("/", cookieController.session);
+router.get("/view", cookieController.view);
 
 export default router;

@@ -1,4 +1,4 @@
-import { messagesModel } from "../../db/models/message.model.js";
+import { messagesModel } from "../models/message.model.js";
 
 class MessagesManager {
     async getMessages() {
@@ -52,4 +52,4 @@ class MessagesManager {
 }
 }
 
-export const messageManager = new MessagesManager();
+export const messageServices = new MessagesManager();

@@ -1,4 +1,4 @@
-import { userModel } from "../../db/models/user.model.js";
+import { userModel } from "../models/user.model.js";
 
 class UserManager {
     async findById(id) {
@@ -17,4 +17,4 @@ class UserManager {
     }
 }
 
-export const userManager = new UserManager();
+export const userServices = new UserManager();

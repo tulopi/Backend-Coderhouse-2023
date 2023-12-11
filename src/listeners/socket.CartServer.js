@@ -1,11 +1,11 @@
-import { cartManager } from "../dao/managersDB/cartManager.js";
+import { cartController } from "../controllers/db.controllers/cart.controller.js";
 
 const socketCartServer = (socketServer) => {
     socketServer.on("connection", async (socket) => {
         socket.on("addToCart", async (data) => {
             try {
                 const { pid, quantity } = data;
-                const cart = await cartManager.createCart({ product: pid, quantity});
+                const cart = await cartController.createCartSocket({ product: pid, quantity});
                 socket.emit("productAdded", { message: "Product added to cart", cart });
             } catch (error) {
                 console.error(error);
