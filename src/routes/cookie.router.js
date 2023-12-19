@@ -1,5 +1,5 @@
 import { Router } from "express";
-import { cookieController } from "../controllers/db.controllers/cookie.controller";
+import { cookieController } from "../controllers/cookie.controller";
 
 const router = Router();
 

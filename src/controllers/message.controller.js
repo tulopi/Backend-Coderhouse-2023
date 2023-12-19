@@ -1,7 +1,7 @@
-import { messageServices } from "../../services/message.services.js";
+import { messageServices } from "../services/message.services.js";
 
 export const messageController = {
-    connection : async (socket) => {
+    connection : async (socketServer, socket) => {
         socketServer.emit("chatBox", await messageServices.getMessages());
         socket.on("message", async (info) => {
             const {user, message} = info;

@@ -1,4 +1,4 @@
-import { userServices } from "../../services/user.services.js"
+import { userServices } from "../services/user.services.js"
 
 export const userController = {
     current: async (req, res) => {

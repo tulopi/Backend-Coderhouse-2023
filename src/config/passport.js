@@ -16,7 +16,7 @@ passport.use(
             if (!first_name || !last_name || !email || !password) {
                 return done(null, false);
             }
-            const existingUser = await userServices.findByEmail(email);
+            const existingUser = await userServices.findOneByEmail(email);
             if (existingUser) {
                 return done(null, false, { message: "Email is already registered" });
             }
@@ -43,7 +43,7 @@ passport.use(
                 return done(null, false)
             }
             try {
-                const user = await userServices.findByEmail(email);
+                const user = await userServices.findOneByEmail(email);
                 if (!user) {
                     done(null, false, { message: "Incorrect email or password." });
                 }
@@ -86,7 +86,7 @@ passport.use(
                         password: " ",
                         isGitHub: true,
                     };
-                    const userDB = await userServices.findByEmail(profile.emails[0].value);
+                    const userDB = await userServices.findOneByEmail(profile.emails[0].value);
                     if (userDB) {
                         if (userDB.isGitHub) {
                             return done(null, userDB);
