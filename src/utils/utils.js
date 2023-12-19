@@ -2,10 +2,14 @@ import { dirname } from "path";
 import { fileURLToPath } from "url";
 import bcrypt from "bcrypt";
 import jwt from "jsonwebtoken";
+import { resolve } from "path";
 
 const SECRETJWT = "jwtSecret";
 
-export const __dirname = dirname(fileURLToPath(import.meta.url));
+const currentFilePath = fileURLToPath(import.meta.url);
+const srcDirectory = resolve(dirname(currentFilePath), '../');
+
+export const __dirname = srcDirectory;
 
 export const hashData = async (data) => {
     return bcrypt.hash(data, 10);

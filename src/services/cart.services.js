@@ -1,37 +1,22 @@
-import { cartModel } from "../models/cart.model.js";
-import { productsModel } from "../models/product.model.js";
+import { cartMongo } from "../DAL/dao/cart.dao.js";
+import { productMongo } from "../DAL/dao/product.dao.js";
 
 class CartService {
     async updateCart(id, products) {
-        try {
-            const cart = await cartModel.findOneAndUpdate({ _id: id }, { products }, { new: true });
-            return cart;
-        } catch (error) {
-            throw error;
-        }
-    }
+            return cartMongo.update({ _id: id }, { products }, { new: true })
+    };
 
     async updateProductQuantity(id, productId, quantity) {
-        try {
-            const cart = await cartModel.findById(id);
-            if (!cart) throw new Error("Cart not found");
-            const productIndex = cart.products.findIndex(item => item.productId.toString() === productId);
-            if (productIndex === -1) throw new Error("Product not found in the cart");
-            cart.products[productIndex].quantity = quantity;
-            const updatedCart = await cart.save();
-            return updatedCart;
-        } catch (error) {
-            throw error;
-        }
+        return cartMongo.updateProductQuantity(id, productId, quantity);
     };
 
     async addProductToCart(cartId, productId, quantity) {
         try {
-            const cart = await cartModel.findById(cartId);
+            const cart = await cartMongo.getById(cartId);
             if (!cart) throw new Error("Cart not found")
             const productIndex = cart.products.findIndex(item => item.productId.toString() === productId);
             if (productIndex === -1) {
-                const product = await productsModel.findById(productId);
+                const product = await productMongo.getById(productId);
                 if (!product) throw new Error("Product not found");
                 if (quantity <= 0) throw new Error("Quantity must be greater than 0");
                 cart.products.push({ productId, quantity });
@@ -47,106 +32,31 @@ class CartService {
     };
 
     async createCart(body) {
-        try {
-            const product = body.product;
-            const id = body.id;
-            const quantity = body.quantity || 1;
-            if (!id || id === undefined) {
-                const newCart = new cartModel({ products: [{ productId: product, quantity }] });
-                if (quantity <= 0) {
-                    throw new Error("Quantity must be greater than 0");
-                }
-                await newCart.save();
-                return { status: 200, newCart };
-            } else {
-                const cart = await cartModel.findOne({ _id: id });
-                if (quantity <= 0) {
-                    throw new Error("Quantity must be greater than 0");
-                }
-                cart.products.push({ product, quantity });
-                await cart.save();
-                return { status: 200, cart };
-            }
-        } catch (error) {
-            throw error;
-        }
+        return cartMongo.createCart(body);
     };
 
     async createSocketCart(req) {
-        try {
-            const product = req.product;
-            const id = req.id;
-            const quantity = req.quantity || 1;
-            if (!id || id === undefined) {
-                const newCart = new cartModel({ products: [{ productId: product, quantity }] });
-                if (quantity <= 0) {
-                    throw new Error("Quantity must be greater than 0");
-                }
-                await newCart.save();
-                return newCart;
-            } else {
-                const cart = await cartModel.findOne({ _id: id });
-                if (quantity <= 0) {
-                    throw new Error("Quantity must be greater than 0");
-                }
-                cart.products.push({ product, quantity });
-                await cart.save();
-                return cart;
-            }
-        } catch (error) {
-            throw error;
-        }
+        return cartMongo.createSocketCart(req);
     };
 
     async findAll() {
-    try {
-        const response = await cartModel.find().populate("products.productId").lean();
-        if (response.lenght == 0) {
-            throw {
-                error: "Cart empty"
-            };
-        }
-        return response;
-    } catch (error) {
-        throw error;
-    }
+        return cartMongo.findAll();
 };
 
     async findCartById(id) {
-    try {
-        const cart = await cartModel
-            .findById(id)
-            .populate("products.productId");
-        if (!cart) {
-            throw new Error("Cart not found");
-        }
-
-        return cart;
-    } catch (error) {
-        throw error;
-    }
+        return cartMongo.findCartById(id);
 };
 
     async updateOne(id, product) {
-    try {
-        const response = await cartModel.updateOne({ _id: id }, product);
-        return response;
-    } catch (error) {
-        throw error;
-    }
+        return cartMongo.update({ _id: id }, product);
 };
 
     async deleteOne(id) {
-    try {
-        const response = await cartModel.deleteOne({ _id: id });
-        return response;
-    } catch (error) {
-        throw error;
-    }
+        return cartMongo.delete({ _id: id });
 };
     async removeProductFromCart(cid, pid) {
     try {
-        const cart = await cartModel.findOne({ _id: cid });
+        const cart = await cartMongo.getById({ _id: cid });
         if (!cart) {
             throw new Error("Cart not found");
         }
@@ -165,7 +75,7 @@ class CartService {
 
     async clearCartByCid(id) {
     try {
-        const cart = await cartModel.findById({ _id: id });
+        const cart = await cartMongo.getById({ _id: id });
         if (!cart) {
             throw new Error("Cart not found");
         }

@@ -1,5 +1,5 @@
-import { productService } from "../../services/product.services.js";
-import { cartService } from "../../services/cart.services.js";
+import { productService } from "../services/product.services.js";
+import { cartService } from "../services/cart.services.js";
 
 export const viewsController = {
     renderProducts: async (req, res) => {

@@ -1,19 +1,16 @@
-import { userModel } from "../models/user.model.js";
+import { usersMongo } from "../DAL/dao/users.dao.js";
 
 class UserManager {
     async findById(id) {
-        const response = await userModel.findById(id);
-        return response;
+        return usersMongo.getById(id);
     }
 
-    async findByEmail(email) {
-        const response = await userModel.findOne({email});
-        return response;
+    async findOneByEmail(email) {
+        return usersMongo.findOneByEmail(email);
     }
 
     async createOne(obj) {
-        const response = await userModel.create(obj);
-        return response;
+        return usersMongo.create(obj);
     }
 }
 

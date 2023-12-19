@@ -1,7 +1,7 @@
 import passport from "passport";
-import { generateToken } from "../../utils/utils.js";
-import { userServices } from "../../services/user.services.js";
-import { hashData, compareData } from "../../utils/utils.js"
+import { generateToken } from "../utils/utils.js";
+import { userServices } from "../services/user.services.js";
+import { hashData, compareData } from "../utils/utils.js"
 
 export const sessionControler = {
     signup: async (req, res, next) => {

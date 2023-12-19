@@ -1,55 +1,20 @@
-import { messagesModel } from "../models/message.model.js";
+import { messagesMongo } from "../DAL/dao/message.dao.js";
 
 class MessagesManager {
     async getMessages() {
-        try {
-            const response = await messagesModel.find().lean();
-            return response;
-        } catch (error) {
-            throw error;
-        }
-    }
+        return messagesMongo.getMessages();
+    };
     async createUser(email) {
-        try {
-            const existingUser = await messagesModel.findOne({ email });
-    
-            if (existingUser) {
-                return null;
-            }
-    
-            const user = { email };
-            const userResponse = await messagesModel.create(user);
-            return userResponse;
-        } catch (error) {
-            throw error;
-        }
-    }
+        return messagesMongo.createUser(email);
+    };
 
     async createMessage(userEmail, messageContent) {
-    try {
-
-        const user = await messagesModel.findOne({ email: userEmail });
-        if (!user) {
-            return null;
-        }
-        user.message.push(messageContent);
-        const userResponse = await user.save();
-        return userResponse;
-    } catch (error) {
-        throw error;
-    }
-}
+        return messagesMongo.createMessage(userEmail, messageContent);
+    };
 
     async deleteAllMessages() {
-    try {
-        const deletedMessages = await messagesModel.deleteMany({});
-        console.log("Messages deleted", deletedMessages);
-        return deletedMessages;
-    } catch (error) {
-        console.log("Error deleting messages", error)
-        throw error;
-    }
-}
-}
+        return messagesMongo.deleteAllMessages();
+    };
+};
 
 export const messageServices = new MessagesManager();
