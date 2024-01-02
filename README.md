@@ -1,19 +1,39 @@
-# Endpoints para la Entrega 10 y adaptación del proyecto para la entrega 11
-Realizar login en el primer endpoint para generar un token y luego acceder a los datos del token desde el segundo endpoint.
-Reestructure la arquitectura del proyecto al lugar donde empiezo a trabajar en 1 semana para practicar, si es necesario puedo adaptarlo a DAO y DTO, lo realice de esta forma porque que estaba ajustado con el tiempo debido a la capacitación y el trabajo actual, utilize el proyecto para irme acostumbrando a las practicas que utilizan en la empresa.
+# Entrega 12
+Adjunto las implementaciones y los pasos necesarios para poder realizar una compra desde cero.
 
 ## Implementación:
-Variables de entorno - arquitectura del proyecto.
+Se implementaron middlewares de autorización para que solo los administradores , midllewares de autorización para que los usuarios, implementación del sistema de tickets, implementación de purchase e implementación de mailing al realizar una compra.
 
 ## Endpoints
+# Todos los endpoints estan operativos y funcionales para ser utilizados desde el nevegador para una fácil visualización.
+
+### Signup de usuario
+
+- **Endpoint:** `http://localhost:8080/signup`
+- **Descripción:** Se puede ingresar utilizando local strategy o github lo cual generara un token y un carrito asignado al usuario.
 
 ### Login de usuario
 
-- **Endpoint:** `http://localhost:8080/login`
-- **Descripción:** Se puede ingresar utilizando local strategy o github lo cual generara un token.
+- **Endpoint:**  `http://localhost:8080/products/`
+- **Descripción:** Ver el listado de productos y entrar en los detalles para luego agregar la cantidad requerida.
 
-### Login de usuario
+### Conseguir los carritos
 
-- **Endpoint:**  `http://localhost:8080/api/users/current`
-- **Descripción:** Accediendo al endpoints current se podrá obtener los datos del usuario.
+- **Endpoint:**  `http://localhost:8080/api/carts`
+- **Descripción:** Obtener listado de carritos y copiar el id del carrito.
+
+### Realizar compra
+
+- **Endpoint:**  `http://localhost:8080/api/carts/:cid/purchase`
+- **Descripción:** En el :cid pegar el _id del carrito para realizar una compra, la cual devolvera los productos disponibles o no, más el totalAmount.
+
+### Ver los tickets
+
+- **Endpoint:**  `http://localhost:8080/api/users/tickets`
+- **Descripción:** Acceder a los tickets para ver detalles de compras.
+
+
+
+
+
 
