@@ -3,7 +3,7 @@ import { productService } from "../services/product.services.js";
 export class ProductController {
     async getAllProducts(req, res) {
         try {
-            const products = await productService.findAll();
+            const products = await productService.findAllLean();
             res.status(200).json({ message: "Products found", products });
         } catch (error) {
             res.status(500).json({ message: error.message });
@@ -19,6 +19,17 @@ export class ProductController {
         }
     }
 
+    async deleteProduct(req, res) {
+        try {
+            const productId = req.params
+            const product = productService.findById(productId);
+            const deletedProduct = productService.deleteOne(product);
+            res.status(200).json({message: "Product deleted", deletedProduct});
+        } catch (error) {
+            res.status(500).json({message: error.message});
+        }
+    }
+
     async getProductById(req, res) {
         const { id } = req.params;
         try {
@@ -30,7 +41,11 @@ export class ProductController {
     }
 
     async addProductToCart(req, res) {
-        const { cid, pid } = req.params;
+        const user = req.user;
+        console.log(user);
+        const userFromDB = await userServices.findById(user)
+        const { pid } = req.params;
+        const cid = userFromDB.cart;
         const { quantity } = req.body;
         try {
             const updatedCart = await productService.addProductToCart(cid, pid, quantity);
@@ -41,7 +56,10 @@ export class ProductController {
     }
 
     async removeProductFromCart(req, res) {
-        const { cid, pid } = req.params;
+        const user = req.user;
+        const userFromDB = await userServices.findById(user)
+        const { pid } = req.params;
+        const cid = userFromDB.cart;
         try {
             const updatedCart = await productService.removeProductFromCart(cid, pid);
             res.status(200).json({ message: "Product removed from cart", cart: updatedCart });

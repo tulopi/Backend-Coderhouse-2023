@@ -33,6 +33,10 @@ const userSchema = new Schema({
     isGoogle: {
         type: Boolean,
         default: false
+    },
+    cart: {
+        type: Schema.Types.ObjectId,
+        ref: "carts"
     }
 });
 

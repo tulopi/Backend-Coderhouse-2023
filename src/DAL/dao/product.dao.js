@@ -51,6 +51,14 @@ class ProductMongo extends BasicMongo {
         return sortOptions;
     };
 
+    async findById(id) {
+        try{
+            const product = await productsModel.findById(id);
+            return product;
+        } catch (error) {
+            throw error;
+        }
+    }
     async createOne(product) {
         try {
             const newProduct = await productsModel.create(product);

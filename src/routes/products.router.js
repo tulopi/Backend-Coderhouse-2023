@@ -1,14 +1,17 @@
 import { Router } from "express";
 import { productController } from "../controllers/product.controller.js";
+import { jwtValidation } from "../middlewares/jwt.middleware.js";
+import { adminMiddleware } from "../middlewares/admin.middleware.js";
 
 const router = Router();
 
 router.get("/", productController.getAllProducts);
-router.post("/", productController.createProduct);
+router.post("/", jwtValidation, adminMiddleware("admin"), productController.createProduct);
+router.delete("/:pid", jwtValidation, adminMiddleware("admin"), productController.deleteProduct);
 router.get("/:id", productController.getProductById);
-router.post("/:cid/products/:pid", productController.addProductToCart);
-router.delete("/:cid/products/:pid", productController.removeProductFromCart);
-router.put("/:cid/products/:pid", productController.updateProductQuantity);
+router.post("/:cid/products/:pid", jwtValidation, productController.addProductToCart);
+router.delete("/:cid/products/:pid", jwtValidation, productController.removeProductFromCart);
+router.put("/:cid/products/:pid", jwtValidation, productController.updateProductQuantity);
 router.delete("/:cid/empty", productController.clearCart);
 router.delete("/:cid", productController.deleteCart);
 

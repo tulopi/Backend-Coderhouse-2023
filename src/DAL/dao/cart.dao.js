@@ -1,8 +1,9 @@
 import { cartModel } from "../../models/cart.model.js"
 import BasicMongo from "./basic.dao.js"
+import { productMongo } from "./product.dao.js";
 
 class CartMongo extends BasicMongo {
-    constructor(){
+    constructor() {
         super(cartModel)
     };
 
@@ -20,7 +21,12 @@ class CartMongo extends BasicMongo {
         }
     };
 
-    
+
+    async createNewCart() {
+        const cart = await cartModel.create();
+        console.log(cart)
+        return cart;
+    };
     async createCart(body) {
         try {
             const product = body.product;
@@ -49,10 +55,17 @@ class CartMongo extends BasicMongo {
 
     async createSocketCart(req) {
         try {
-            const product = req.product;
-            const id = req.id;
+            const product = await productMongo.findById(req.product);
+            const cartId = req.cid;
+            const cart = await cartModel.findById(cartId);
             const quantity = req.quantity || 1;
-            if (!id || id === undefined) {
+    
+            if (!cart || cart === undefined) {
+                console.log("You must be logged in to buy");
+                throw new Error("You must be logged in to buy");
+            }
+    
+            if (!product || product === undefined) {
                 const newCart = new cartModel({ products: [{ productId: product, quantity }] });
                 if (quantity <= 0) {
                     throw new Error("Quantity must be greater than 0");
@@ -60,13 +73,13 @@ class CartMongo extends BasicMongo {
                 await newCart.save();
                 return newCart;
             } else {
-                const cart = await cartModel.findOne({ _id: id });
+                const existingCart = await cartModel.findOne({ _id: cartId });
                 if (quantity <= 0) {
                     throw new Error("Quantity must be greater than 0");
                 }
-                cart.products.push({ product, quantity });
-                await cart.save();
-                return cart;
+                existingCart.products.push({ productId: product, quantity });
+                await existingCart.save();
+                return existingCart;
             }
         } catch (error) {
             throw error;
@@ -95,7 +108,7 @@ class CartMongo extends BasicMongo {
             if (!cart) {
                 throw new Error("Cart not found");
             }
-    
+
             return cart;
         } catch (error) {
             throw error;

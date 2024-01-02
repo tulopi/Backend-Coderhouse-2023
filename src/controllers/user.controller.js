@@ -10,5 +10,5 @@ export const userController = {
             console.log(error);
             res.status(401).json("Not authorized", error)
         }
-    }
+    },
 };

@@ -1,4 +1,5 @@
 import { productService } from "../services/product.services.js";
+import { userServices } from "../services/user.services.js";
 import { cartService } from "../services/cart.services.js";
 
 export const viewsController = {
@@ -20,19 +21,24 @@ export const viewsController = {
 
     renderProductDetails: async (req, res) => {
         try {
+            const cartId = req.user.cart.toString()
             const { pid } = req.params;
             const product = await productService.findById(pid);
             if (!product) {
                 return res.status(404).json({ message: "Product not found" });
             }
-            res.render("products", { product });
+            res.render("products", { product, cartId});
         } catch (error) {
             res.status(500).json({ message: error.message });
         }
     },
 
     renderChat: async (req, res) => {
-        res.render("chat");
+        try {
+            res.render("chat");
+        } catch(error) {
+            res.status(401).json({message: error.message})
+        }
     },
 
     renderCart: async (req, res) => {

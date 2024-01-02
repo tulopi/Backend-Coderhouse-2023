@@ -1,10 +1,10 @@
-export const authMiddleware = (roles) => {
+export const adminMiddleware = (roles) => {
     return (req, res, next) => {
         try {
             if (!req.user || !req.user.role) {
-                return res.status(403).json("Not authorized: User role not found or not logged in");
+                return res.status(403).json("Not authorized: User role not found");
             }
-            if (roles.includes("user") || roles.includes(req.user.role)) {
+            if (roles.includes("admin") || roles.includes(req.user.role)) {
                 return next();
             }
             return res.status(403).json("Not authorized: User role not permitted");

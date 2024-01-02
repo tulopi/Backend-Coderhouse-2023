@@ -1,12 +1,12 @@
-import { Schema, Model } from "mongoose";
+import { Schema, model } from "mongoose";
 
 const ticketSchema = new Schema({
     code:{
         type: String,
-        required: true
+        unique: true,
     },
     purchase_datetime:{
-        type: String,
+        type: Date,
         required: true
     },
     amount:{
@@ -14,9 +14,9 @@ const ticketSchema = new Schema({
         required: true
     },
     purchaser:{
-        type: String,
-        required: true
+        type: Schema.Types.ObjectId,
+        ref: "users"
     }
 });
 
-export const ticketModel = Model("Tickets", ticketSchema)
+export const ticketModel = model("Tickets", ticketSchema)

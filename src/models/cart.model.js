@@ -8,12 +8,12 @@ const cartsSchema = new Schema({
             productId: {
                 type: ObjectId,
                 ref: "Products",
-                require: true
             },
             quantity: {
                 type: Number,
-                require: true
-            }
+                required: true,
+            },
+            _id: false,
         }]
 
 })

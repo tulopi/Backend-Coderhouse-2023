@@ -1,4 +1,6 @@
 import { cartService } from "../services/cart.services.js";
+import { userServices } from "../services/user.services.js";
+import { transporter } from "../utils/nodemailer.js";
 
 export const cartController = {
     getAllCarts: async (req, res) => {
@@ -20,11 +22,11 @@ export const cartController = {
     },
 
     createCartSocket: async (req, res) => {
-        try{
+        try {
             const newcart = await cartService.createSocketCart(req);
             return newcart;
         } catch (error) {
-            console.log({message: error.message});
+            console.log({ message: error.message }, "cart.controller");
         }
     },
     getCartById: async (req, res) => {
@@ -38,7 +40,11 @@ export const cartController = {
     },
 
     addProductToCart: async (req, res) => {
-        const { cid, pid } = req.params;
+        const user = req.user;
+        console.log(user);
+        const userFromDB = await userServices.findById(user)
+        const { pid } = req.params;
+        const cid = userFromDB.cart;
         const { quantity } = req.body;
         try {
             const updatedCart = await cartService.addProductToCart(cid, pid, quantity);
@@ -49,7 +55,10 @@ export const cartController = {
     },
 
     removeProductFromCart: async (req, res) => {
-        const { cid, pid } = req.params;
+        const user = req.user;
+        const userFromDB = await userServices.findById(user)
+        const { pid } = req.params;
+        const cid = userFromDB.cart;
         try {
             const updatedCart = await cartService.removeProductFromCart(cid, pid);
             res.status(200).json({ message: "Product removed from cart", cart: updatedCart });
@@ -86,6 +95,24 @@ export const cartController = {
             res.status(200).json({ message: "Cart deleted", cart: deletedCart });
         } catch (error) {
             res.status(500).json({ message: error.message });
+        }
+    },
+    purchase: async (req, res) => {
+        try {
+            const getUser = await userServices.findById(req.user._id)
+            const idCart = getUser.cart;
+            const user = req.user;
+            const response = await cartService.purchase(idCart, user)
+            const mailOptions = {
+                from: "Coderhouse-Backend",
+                to: getUser.email,
+                subject: "Purchase done",
+                text: "Your purchase has been processed."
+            }
+                await transporter.sendMail(mailOptions)
+            res.status(200).json({response});
+        } catch (error) {
+            res.status(401).json("Not authorized", error);
         }
     }
 };

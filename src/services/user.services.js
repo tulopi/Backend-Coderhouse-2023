@@ -1,4 +1,5 @@
 import { usersMongo } from "../DAL/dao/users.dao.js";
+import { cartModel } from "../models/cart.model.js";
 
 class UserManager {
     async findById(id) {
@@ -9,8 +10,14 @@ class UserManager {
         return usersMongo.findOneByEmail(email);
     }
 
-    async createOne(obj) {
-        return usersMongo.create(obj);
+    async createOne(user) {
+        const createdCart = new cartModel();
+        await createdCart.save();
+        const createdUser = await usersMongo.createUser({
+            ...user,
+            cart: createdCart._id,
+        });
+        return createdUser;
     }
 }
 
