@@ -1,8 +1,9 @@
-# Entrega 12
+# Entrega 12 y 13
 Adjunto las implementaciones y los pasos necesarios para poder realizar una compra desde cero.
 
 ## Implementación:
 Se implementaron middlewares de autorización para que solo los administradores , midllewares de autorización para que los usuarios, implementación del sistema de tickets, implementación de purchase e implementación de mailing al realizar una compra.
+En la entrega 13 se implemento el uso de statusError en la carpeta utils.js actualmente solo esta implementado en la ruta products y sus controladores/servicios/dao, en caso de estar correcto procedo a refactorizar todo el proyecto.
 
 ## Endpoints
 # Todos los endpoints estan operativos y funcionales para ser utilizados desde el nevegador para una fácil visualización.
@@ -31,6 +32,11 @@ Se implementaron middlewares de autorización para que solo los administradores 
 
 - **Endpoint:**  `http://localhost:8080/api/users/tickets`
 - **Descripción:** Acceder a los tickets para ver detalles de compras.
+
+### Mocking
+
+- **Endpoint:** `http://localhost:8080/api/products/faker/mockingproducts`
+- **Descripción:** Generar 100 productos aleatorios o los que se quiera cambiando el amount.
 
 
 
