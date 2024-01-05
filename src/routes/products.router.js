@@ -14,5 +14,6 @@ router.delete("/:cid/products/:pid", jwtValidation, productController.removeProd
 router.put("/:cid/products/:pid", jwtValidation, productController.updateProductQuantity);
 router.delete("/:cid/empty", productController.clearCart);
 router.delete("/:cid", productController.deleteCart);
+router.get("/faker/mockingproducts", productController.mockingProducts);
 
 export default router;

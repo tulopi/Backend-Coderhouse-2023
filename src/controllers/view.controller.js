@@ -21,7 +21,7 @@ export const viewsController = {
 
     renderProductDetails: async (req, res) => {
         try {
-            const cartId = req.user.cart.toString()
+            const cartId = req.user && req.user.cart ? req.user.cart : null;
             const { pid } = req.params;
             const product = await productService.findById(pid);
             if (!product) {

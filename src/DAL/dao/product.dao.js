@@ -1,8 +1,9 @@
 import { productsModel } from "../../models/product.model.js"
+import { StatusError } from "../../utils/statusError.js";
 import BasicMongo from "./basic.dao.js";
 
 class ProductMongo extends BasicMongo {
-    constructor(){
+    constructor() {
         super(productsModel)
     }
 
@@ -32,31 +33,35 @@ class ProductMongo extends BasicMongo {
                 nextLink: response.hasNextPage ? `/products?page=${response.nextPage}&limit=${limit}` : null
             };
         } catch (error) {
-            throw error;
+            throw new StatusError("Error finding products", 500);
         }
     }
 
     async getSortedQuery(sortField) {
-        const sortOptions = {};
-        switch (sortField) {
-            case 'price':
-                sortOptions.price = 1;
-                break;
-            case 'category':
-                sortOptions.category = 1;
-                break;
-            default:
-                sortOptions.defaultField = 1;
+        try {
+            const sortOptions = {};
+            switch (sortField) {
+                case 'price':
+                    sortOptions.price = 1;
+                    break;
+                case 'category':
+                    sortOptions.category = 1;
+                    break;
+                default:
+                    sortOptions.defaultField = 1;
+            }
+            return sortOptions;
+        } catch (error) {
+            throw new StatusError("Error getting sorted query", 500);
         }
-        return sortOptions;
     };
 
-    async findById(id) {
-        try{
+    async getById(id) {
+        try {
             const product = await productsModel.findById(id);
             return product;
         } catch (error) {
-            throw error;
+            throw new StatusError("Error finding product", 500);
         }
     }
     async createOne(product) {
@@ -64,7 +69,7 @@ class ProductMongo extends BasicMongo {
             const newProduct = await productsModel.create(product);
             return newProduct;
         } catch (error) {
-            throw error;
+            throw new StatusError("Error creating product", 500);
         }
     };
 
@@ -73,7 +78,7 @@ class ProductMongo extends BasicMongo {
             const products = await productsModel.find().lean();
             return products;
         } catch (error) {
-            throw error;
+            throw new StatusError("Error finding products", 500);
         }
     };
 
