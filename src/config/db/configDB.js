@@ -5,5 +5,5 @@ const URI = config.mongoUrl;
 
 mongoose.connect(URI)
     .then(() => {
-        console.log("connected to mongodb");
+        console.log("🛜  Connected to MongoDB 🛜");
     }).catch((error) => console.log(error));

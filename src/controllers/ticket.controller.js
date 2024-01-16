@@ -1,4 +1,5 @@
 import { ticketServices } from "../services/ticket.services.js";
+import { handleServerError } from "../loggers/errorHandler.js";
 
 export const ticketController = {
     getAllTickets: async(req, res) => {
@@ -6,7 +7,8 @@ export const ticketController = {
             const tickets = await ticketServices.getAllTickets();
             res.status(200).json({message:"Tickets found: ", tickets});
         } catch (error) {
-            res.status(500).json({message: error.message})
+            handleServerError(res, error, req);
         }
     }
 };
+

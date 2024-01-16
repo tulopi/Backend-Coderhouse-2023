@@ -1,5 +1,7 @@
 import { cartService } from "../services/cart.services.js";
 import { userServices } from "../services/user.services.js";
+
+import { handleServerError } from "../loggers/errorHandler.js";
 import { transporter } from "../utils/nodemailer.js";
 
 export const cartController = {
@@ -8,7 +10,7 @@ export const cartController = {
             const carts = await cartService.findAll();
             res.status(200).json({ message: "Carts found", carts });
         } catch (error) {
-            res.status(500).json({ message: error.message });
+            handleServerError(res, error, req);
         }
     },
 
@@ -17,7 +19,7 @@ export const cartController = {
             const newCart = await cartService.createCart(req);
             res.status(200).json({ message: "Cart created", cart: newCart });
         } catch (error) {
-            res.status(500).json({ message: error.message });
+            handleServerError(res, error, req);
         }
     },
 
@@ -35,7 +37,7 @@ export const cartController = {
             const cart = await cartService.findCartById(id);
             res.status(200).json({ message: "Cart found", cart });
         } catch (error) {
-            res.status(500).json({ message: error.message });
+            handleServerError(res, error, req);
         }
     },
 
@@ -50,7 +52,7 @@ export const cartController = {
             const updatedCart = await cartService.addProductToCart(cid, pid, quantity);
             res.status(200).json({ message: "Product added to cart", cart: updatedCart });
         } catch (error) {
-            res.status(500).json({ message: error.message });
+            handleServerError(res, error, req);
         }
     },
 
@@ -63,7 +65,7 @@ export const cartController = {
             const updatedCart = await cartService.removeProductFromCart(cid, pid);
             res.status(200).json({ message: "Product removed from cart", cart: updatedCart });
         } catch (error) {
-            res.status(500).json({ message: error.message });
+            handleServerError(res, error, req);
         }
     },
 
@@ -74,7 +76,7 @@ export const cartController = {
             const updatedCart = await cartService.updateProductQuantity(cid, pid, quantity);
             res.status(200).json({ message: "Product quantity updated in cart", cart: updatedCart });
         } catch (error) {
-            res.status(500).json({ message: error.message });
+            handleServerError(res, error, req);
         }
     },
 
@@ -84,7 +86,7 @@ export const cartController = {
             const clearedCart = await cartService.clearCartByCid(cid);
             res.status(200).json({ message: "Cart cleared", cart: clearedCart });
         } catch (error) {
-            res.status(500).json({ message: error.message });
+            handleServerError(res, error, req);
         }
     },
 
@@ -94,7 +96,7 @@ export const cartController = {
             const deletedCart = await cartService.deleteCartByCid(cid);
             res.status(200).json({ message: "Cart deleted", cart: deletedCart });
         } catch (error) {
-            res.status(500).json({ message: error.message });
+            handleServerError(res, error, req);
         }
     },
     purchase: async (req, res) => {

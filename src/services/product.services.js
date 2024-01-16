@@ -31,7 +31,7 @@ export class ProductService {
 
     async findById(id) {
         try {
-            const product = await productMongo.getById(id);
+            const product = await productMongo.findById(id);
             if (!product) {
                 throw new StatusError("Product not found", 404);
             }
@@ -43,7 +43,7 @@ export class ProductService {
 
     async addProductToCart(cid, pid, quantity) {
         const cart = await cartMongo.getById(cid);
-        const product = await productMongo.getById(pid);
+        const product = await productMongo.findById(pid);
 
         if (!cart || !product) {
             throw new StatusError("Cart or Product not found", 404);

@@ -1,5 +1,5 @@
 import { productService } from "../services/product.services.js";
-import { userServices } from "../services/user.services.js";
+import { handleServerError } from "../loggers/errorHandler.js";
 import { cartService } from "../services/cart.services.js";
 
 export const viewsController = {
@@ -15,7 +15,7 @@ export const viewsController = {
             });
             res.render("home", { object, user });
         } catch (error) {
-            res.status(404).json({ message: error.message });
+            handleServerError(res, error, req);
         }
     },
 
@@ -29,15 +29,15 @@ export const viewsController = {
             }
             res.render("products", { product, cartId});
         } catch (error) {
-            res.status(500).json({ message: error.message });
+            handleServerError(res, error, req);
         }
     },
 
     renderChat: async (req, res) => {
         try {
             res.render("chat");
-        } catch(error) {
-            res.status(401).json({message: error.message})
+        } catch (error) {
+            handleServerError(res, error, req);
         }
     },
 
@@ -50,7 +50,7 @@ export const viewsController = {
             }
             res.render("carts", { cart });
         } catch (error) {
-            res.status(500).json({ message: error.message });
+            handleServerError(res, error, req);
         }
     },
 

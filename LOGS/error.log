@@ -1,0 +1,74 @@
+[2024-01-15T12:15:12.925] [ERROR] error - undefined
+[2024-01-15T12:15:20.226] [ERROR] error - undefined
+[2024-01-15T12:23:35.245] [ERROR] error - undefined
+[2024-01-15T12:25:50.989] [ERROR] error - undefined
+[2024-01-15T12:26:31.753] [ERROR] error - undefined
+[2024-01-15T12:28:09.326] [ERROR] error - undefined
+[2024-01-15T12:29:39.338] [ERROR] error - undefined
+[2024-01-15T12:29:40.959] [ERROR] error - undefined
+[2024-01-15T12:29:42.261] [ERROR] error - undefined
+[2024-01-15T12:30:59.524] [ERROR] error - undefined
+[2024-01-15T12:31:32.468] [ERROR] error - undefined
+[2024-01-15T12:31:32.924] [ERROR] error - undefined
+[2024-01-15T12:31:45.500] [ERROR] error - undefined
+[2024-01-15T12:32:17.734] [ERROR] error - undefined
+[2024-01-15T12:32:31.628] [ERROR] error - undefined
+[2024-01-15T12:32:32.713] [ERROR] error - undefined
+[2024-01-15T12:32:35.451] [ERROR] error - undefined
+[2024-01-15T12:36:07.624] [ERROR] error - undefined
+[2024-01-15T12:38:32.834] [ERROR] error - undefined
+[2024-01-15T12:38:34.498] [ERROR] error - undefined
+[2024-01-15T12:38:35.970] [ERROR] error - undefined
+[2024-01-15T12:38:38.739] [ERROR] error - undefined
+[2024-01-15T12:38:58.894] [ERROR] error - undefined
+[2024-01-15T12:39:10.147] [ERROR] error - undefined
+[2024-01-15T12:39:11.833] [ERROR] error - undefined
+[2024-01-15T12:39:12.953] [ERROR] error - undefined
+[2024-01-15T12:39:14.378] [ERROR] error - undefined
+[2024-01-15T12:39:28.009] [ERROR] error - undefined
+[2024-01-15T12:39:42.820] [ERROR] error - undefined
+[2024-01-15T12:39:53.576] [ERROR] error - undefined
+[2024-01-15T12:40:41.777] [ERROR] error - undefined
+[2024-01-15T12:40:43.199] [ERROR] error - undefined
+[2024-01-15T12:44:20.489] [ERROR] error - undefined
+[2024-01-15T12:44:22.484] [ERROR] error - undefined
+[2024-01-15T12:47:32.422] [ERROR] error - undefined
+[2024-01-15T12:47:33.914] [ERROR] error - undefined
+[2024-01-15T12:47:45.001] [ERROR] error - undefined
+[2024-01-15T12:48:32.521] [ERROR] error - undefined
+[2024-01-15T12:51:09.220] [ERROR] error - undefined
+[2024-01-15T12:51:33.226] [ERROR] error - undefined
+[2024-01-15T12:51:43.163] [ERROR] error - undefined
+[2024-01-15T12:51:44.564] [ERROR] error - undefined
+[2024-01-15T12:51:45.370] [ERROR] error - undefined
+[2024-01-15T12:51:45.956] [ERROR] error - undefined
+[2024-01-15T12:51:46.745] [ERROR] error - undefined
+[2024-01-15T12:51:47.127] [ERROR] error - undefined
+[2024-01-15T12:51:47.492] [ERROR] error - undefined
+[2024-01-15T12:51:47.862] [ERROR] error - undefined
+[2024-01-15T12:51:48.088] [ERROR] error - undefined
+[2024-01-15T12:51:48.982] [ERROR] error - undefined
+[2024-01-15T12:56:20.241] [ERROR] error - undefined
+[2024-01-15T13:00:22.124] [ERROR] error - undefined
+[2024-01-15T13:03:20.931] [ERROR] error - undefined
+[2024-01-15T13:03:22.356] [ERROR] error - undefined
+[2024-01-15T13:03:23.494] [ERROR] error - undefined
+[2024-01-15T13:03:28.981] [ERROR] error - undefined
+[2024-01-15T13:04:29.168] [ERROR] error - undefined
+[2024-01-15T13:04:30.395] [ERROR] error - undefined
+[2024-01-15T13:04:31.005] [ERROR] error - undefined
+[2024-01-15T13:04:32.144] [ERROR] error - undefined
+[2024-01-15T13:04:51.728] [ERROR] error - undefined
+[2024-01-15T21:01:42.663] [ERROR] error - Error [ERR_HTTP_HEADERS_SENT]: Cannot set headers after they are sent to the client
+    at ServerResponse.setHeader (node:_http_outgoing:652:11)
+    at ServerResponse.header (E:\Programacion Backend\Marco Villani Backend\node_modules\express\lib\response.js:794:10)
+    at ServerResponse.send (E:\Programacion Backend\Marco Villani Backend\node_modules\express\lib\response.js:174:12)
+    at ServerResponse.json (E:\Programacion Backend\Marco Villani Backend\node_modules\express\lib\response.js:278:15)
+    at file:///E:/Programacion%20Backend/Marco%20Villani%20Backend/src/controllers/session.controllers.js:22:44
+    at strategy.error (E:\Programacion Backend\Marco Villani Backend\node_modules\passport\lib\middleware\authenticate.js:361:18)
+    at verified (E:\Programacion Backend\Marco Villani Backend\node_modules\passport-local\lib\strategy.js:81:28)
+    at Strategy._verify (file:///E:/Programacion%20Backend/Marco%20Villani%20Backend/src/config/passport.js:56:17)
+    at process.processTicksAndRejections (node:internal/process/task_queues:95:5) {
+  code: 'ERR_HTTP_HEADERS_SENT'
+}
+[2024-01-15T21:15:33.427] [ERROR] error - Error en servidor Error: listen EADDRINUSE: address already in use :::8080

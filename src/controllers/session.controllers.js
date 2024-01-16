@@ -1,7 +1,8 @@
 import passport from "passport";
 import { generateToken } from "../utils/utils.js";
 import { userServices } from "../services/user.services.js";
-import { hashData, compareData } from "../utils/utils.js"
+import { handleServerError } from "../loggers/errorHandler.js";
+import { hashData} from "../utils/utils.js"
 
 export const sessionControler = {
     signup: async (req, res, next) => {
@@ -11,7 +12,7 @@ export const sessionControler = {
                 failureRedirect: "/error",
             })(req, res, next);
         } catch (error) {
-            res.status(500).json({ message: "Error during signup: " + error.message });
+            handleServerError(res, error, req);
         }
     },
     login: async (req, res, next) => {
@@ -31,7 +32,7 @@ export const sessionControler = {
                         .json({ token })
                 });
             } catch (error) {
-                res.status(500).json({ message: "Error during login: " + error.message });
+                handleServerError(res, error, req);
             }
         })(req, res, next);
     },
@@ -59,7 +60,7 @@ export const sessionControler = {
             await user.save();
             res.status(200).json({ message: "Password updated" });
         } catch (error) {
-            res.status(500).json({ message: "Error during password restoration: " + error.message });
+            handleServerError(res, error, req);
         }
     }
 };

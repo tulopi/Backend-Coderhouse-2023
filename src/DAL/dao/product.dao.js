@@ -1,10 +1,10 @@
-import { productsModel } from "../../models/product.model.js"
+import { productsModel } from "../../models/product.model.js";
 import { StatusError } from "../../utils/statusError.js";
 import BasicMongo from "./basic.dao.js";
 
 class ProductMongo extends BasicMongo {
     constructor() {
-        super(productsModel)
+        super(productsModel);
     }
 
     async findAll(obj) {
@@ -54,16 +54,20 @@ class ProductMongo extends BasicMongo {
         } catch (error) {
             throw new StatusError("Error getting sorted query", 500);
         }
-    };
+    }
 
-    async getById(id) {
+    async findById(id) {
         try {
             const product = await productsModel.findById(id);
+            if (!product) {
+                throw new StatusError(`Product with ID ${id} not found`, 404);
+            }
             return product;
         } catch (error) {
             throw new StatusError("Error finding product", 500);
         }
     }
+
     async createOne(product) {
         try {
             const newProduct = await productsModel.create(product);
@@ -71,7 +75,7 @@ class ProductMongo extends BasicMongo {
         } catch (error) {
             throw new StatusError("Error creating product", 500);
         }
-    };
+    }
 
     async findAllLean() {
         try {
@@ -80,16 +84,19 @@ class ProductMongo extends BasicMongo {
         } catch (error) {
             throw new StatusError("Error finding products", 500);
         }
-    };
+    }
 
     async updateOne(id, product) {
         try {
             const response = await productsModel.updateOne({ _id: id }, product);
+            if (response.nModified === 0) {
+                throw new StatusError(`Product with ID ${id} not found`, 404);
+            }
             return response;
         } catch (error) {
-            throw error;
+            throw new StatusError(error.message, 500);
         }
-    };
-};
+    }
+}
 
 export const productMongo = new ProductMongo();

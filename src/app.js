@@ -1,72 +1,32 @@
-import express from "express";
-import cookieParser from "cookie-parser";
-import session from "express-session";
-import passport from "passport";
-import { engine } from "express-handlebars";
-import { Server } from "socket.io";
-import MongoStore from "connect-mongo";
+// app.js
+import { createServer } from "http";
 import config from "./config/config.js";
-import "./config/db/configDB.js";
-import "./config/passport.js";
-import { __dirname } from "./utils/utils.js";
-import productsRouter from "./routes/products.router.js";
-import cartRouter from "./routes/cart.router.js";
-import viewsRouter from "./routes/views.router.js";
-import sessionsRouter from "./routes/sessions.router.js";
-import usersRouter from "./routes/users.router.js";
+import { logError, logInfo } from "./loggers/index.js";
 import socketChatServer from "./listeners/socket.ChatServer.js";
 import socketCartServer from "./listeners/socket.CartServer.js";
+import app from "./index.js";
+import { Server } from "socket.io";
 
-const app = express();
-const port = parseInt(config.port);
-const MONGODB_URI = config.mongoUrl;
-const SECRET_SESSION = config.secret_session;
+const PORT = parseInt(config.port);
 
-// Middlewares
-app.use(express.json());
-app.use(express.urlencoded({ extended: true }));
-app.use(express.static(__dirname + '/public'));
-app.use(cookieParser());
+// HTTP Server
+const httpServer = createServer(app);
 
-// Session setup
-app.use(
-    session({
-        store: new MongoStore({
-            mongoUrl: MONGODB_URI,
-        }),
-        secret: SECRET_SESSION,
-        cookie: { maxAge: 6000000 },
-    })
-);
-
-// Passport initialization
-app.use(passport.initialize());
-app.use(passport.session());
-
-// Handlebars setup
-app.engine('handlebars', engine({
-    defaultLayout: "main",
-    runtimeOptions: {
-        allowProtoPropertiesByDefault: true,
-        allowProtoMethodsByDefault: true,
-    }
-}));
-app.set('view engine', 'handlebars');
-app.set('views', __dirname + '/views');
-
-// Routes
-app.use("/", viewsRouter);
-app.use("/api/products", productsRouter);
-app.use("/api/carts", cartRouter);
-app.use("/api/sessions", sessionsRouter);
-app.use("/api/users", usersRouter);
+// Socket server
+const io = new Server(httpServer);
 
 // Server setup
-const httpServer = app.listen(port, () => {
-    console.log(`Listening on port ${port}`);
-});
+const enableServers = () => {
+    httpServer.listen(PORT, () => {
+        logInfo(`🔺 Server running on http://localhost:${PORT}... 🔺`);
+    });
 
-// Socket setup
-const socketServer = new Server(httpServer);
-socketChatServer(socketServer);
-socketCartServer(socketServer);
+    httpServer.on("error", (error) => {
+        logError(`Error en servidor ${error}`);
+    });
+
+    socketChatServer(io);
+    socketCartServer(io);
+};
+
+enableServers();

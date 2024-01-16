@@ -1,14 +1,15 @@
 import { productService } from "../services/product.services.js";
 import { StatusError } from "../utils/statusError.js";
+import { logError, logWarning } from "../loggers/index.js";
+import { handleServerError } from "../loggers/errorHandler.js";
 
 export class ProductController {
     async getAllProducts(req, res) {
         try {
             const products = await productService.findAllLean();
             res.status(200).json({ message: "Products found", products });
-        } catch (error) {
-            const status = error instanceof StatusError ? error.status : 500;
-            res.status(status).json({ message: error.message });
+        }  catch (error) {
+            handleServerError(res, error, req);
         }
     }
 
@@ -17,8 +18,7 @@ export class ProductController {
             const newProduct = await productService.create(req.body);
             res.status(200).json({ message: "Product created", product: newProduct });
         } catch (error) {
-            const status = error instanceof StatusError ? error.status : 500;
-            res.status(status).json({ message: error.message });
+            handleServerError(res, error, req);
         }
     }
 
@@ -29,8 +29,7 @@ export class ProductController {
             const deletedProduct = await productService.deleteOne(product);
             res.status(200).json({ message: "Product deleted", deletedProduct });
         } catch (error) {
-            const status = error instanceof StatusError ? error.status : 500;
-            res.status(status).json({ message: error.message });
+            handleServerError(res, error, req);
         }
     }
 
@@ -40,8 +39,7 @@ export class ProductController {
             const product = await productService.findById(id);
             res.status(200).json({ message: "Product found", product });
         } catch (error) {
-            const status = error instanceof StatusError ? error.status : 500;
-            res.status(status).json({ message: error.message });
+            handleServerError(res, error, req);
         }
     }
 
@@ -55,8 +53,7 @@ export class ProductController {
             const updatedCart = await productService.addProductToCart(cid, pid, quantity);
             res.status(200).json({ message: "Product added to cart", cart: updatedCart });
         } catch (error) {
-            const status = error instanceof StatusError ? error.status : 500;
-            res.status(status).json({ message: error.message });
+            handleServerError(res, error, req);
         }
     }
 
@@ -69,8 +66,7 @@ export class ProductController {
             const updatedCart = await productService.removeProductFromCart(cid, pid);
             res.status(200).json({ message: "Product removed from cart", cart: updatedCart });
         } catch (error) {
-            const status = error instanceof StatusError ? error.status : 500;
-            res.status(status).json({ message: error.message });
+            handleServerError(res, error, req);
         }
     }
 
@@ -81,8 +77,7 @@ export class ProductController {
             const updatedCart = await productService.updateProductQuantity(cid, pid, quantity);
             res.status(200).json({ message: "Product quantity updated in cart", cart: updatedCart });
         } catch (error) {
-            const status = error instanceof StatusError ? error.status : 500;
-            res.status(status).json({ message: error.message });
+            handleServerError(res, error, req);
         }
     }
 
@@ -92,8 +87,7 @@ export class ProductController {
             const clearedCart = await productService.clearCartByCid(cid);
             res.status(200).json({ message: "Cart cleared", cart: clearedCart });
         } catch (error) {
-            const status = error instanceof StatusError ? error.status : 500;
-            res.status(status).json({ message: error.message });
+            handleServerError(res, error, req);
         }
     }
 
@@ -103,8 +97,7 @@ export class ProductController {
             const deletedCart = await productService.deleteCartByCid(cid);
             res.status(200).json({ message: "Cart deleted", cart: deletedCart });
         } catch (error) {
-            const status = error instanceof StatusError ? error.status : 500;
-            res.status(status).json({ message: error.message });
+            handleServerError(res, error, req);
         }
     }
 
@@ -114,8 +107,7 @@ export class ProductController {
             const mocking = productService.mocking(amount);
             res.status(200).json({ message: `${amount} Products mocked successfully!`, mocking });
         } catch (error) {
-            const status = error instanceof StatusError ? error.status : 500;
-            res.status(status).json({ message: error.message });
+            handleServerError(res, error, req);
         }
     }
 }

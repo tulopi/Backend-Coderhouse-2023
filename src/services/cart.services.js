@@ -1,5 +1,6 @@
 import { cartMongo } from "../DAL/dao/cart.dao.js";
 import { productMongo } from "../DAL/dao/product.dao.js";
+import { StatusError } from "../utils/statusError.js";
 import { ticketMongo } from "../DAL/dao/tickets.dao.js";
 import { v4 as uuidv4 } from "uuid";
 
@@ -14,73 +15,100 @@ class CartService {
 
     async getCart(id) {
         const cart = await cartMongo.getById(id).populate("products.product");
+        return cart;
     };
 
     async purchase(id, user) {
-        const cart = await cartMongo.getById(id);
-        console.log(cart);
-        const cartProducts = cart.products;
-        console.log(cartProducts);
-
-        let availableProducts = [];
-        let unavailableProducts = [];
-        let totalAmount = 0;
-
-        for (let item of cartProducts) {
-            const product = await productMongo.findById(item.productId);
-
-            if (!product) {
-                unavailableProducts.push(item);
-                continue;
+        try {
+            const cart = await cartMongo.getById(id);
+            if (!cart) {
+                throw new StatusError("Cart not found", 404);
             }
 
-            if (product.stock >= item.quantity) {
-                availableProducts.push(item);
-                product.stock -= item.quantity;
-                await product.save();
-                totalAmount += item.quantity * product.price;
+            const cartProducts = cart.products;
+
+            let availableProducts = [];
+            let unavailableProducts = [];
+            let totalAmount = 0;
+
+            for (let item of cartProducts) {
+                const product = await productMongo.getById(item.productId);
+
+                if (!product) {
+                    unavailableProducts.push(item);
+                    continue;
+                }
+
+                if (product.stock >= item.quantity) {
+                    availableProducts.push(item);
+                    product.stock -= item.quantity;
+                    await product.save();
+                    totalAmount += item.quantity * product.price;
+                } else {
+                    unavailableProducts.push(item);
+                }
+            }
+
+            cart.products = unavailableProducts;
+            await cart.save();
+
+            if (availableProducts.length > 0) {
+                if (user.role === 'user') {
+                    const ticket = {
+                        code: uuidv4(),
+                        purchase_datetime: new Date(),
+                        amount: totalAmount,
+                        purchaser: user
+                    };
+                    await ticketMongo.createTicket(ticket);
+                    return { availableProducts, totalAmount };
+                } else {
+                    throw new StatusError('Unauthorized: Only users can purchase.', 401);
+                }
+            }
+            return { unavailableProducts };
+        } catch (error) {
+            if (error instanceof StatusError) {
+                throw error;
             } else {
-                unavailableProducts.push(item);
+                throw new StatusError(error.message, 500);
             }
         }
-        cart.products = unavailableProducts;
-        await cart.save();
-
-        if (availableProducts.length > 0) {
-            if (user.role === 'user') {
-                const ticket = {
-                    code: uuidv4(),
-                    purchase_datetime: new Date(),
-                    amount: totalAmount,
-                    purchaser: user
-                };
-                await ticketMongo.createTicket(ticket);
-                return { availableProducts, totalAmount };
-            } else {
-                throw new Error('Unauthorized: Only users can purchase.');
-            }
-        }
-        return { unavailableProducts };
     };
 
     async addProductToCart(cartId, productId, quantity) {
         try {
             const cart = await cartMongo.getById(cartId);
-            if (!cart) throw new Error("Cart not found")
+            if (!cart) {
+                throw new StatusError("Cart not found", 404);
+            }
+
             const productIndex = cart.products.findIndex(item => item.productId.toString() === productId);
+
             if (productIndex === -1) {
                 const product = await productMongo.getById(productId);
-                if (!product) throw new Error("Product not found");
-                if (quantity <= 0) throw new Error("Quantity must be greater than 0");
+                if (!product) {
+                    throw new StatusError("Product not found", 404);
+                }
+                if (quantity <= 0) {
+                    throw new StatusError("Quantity must be greater than 0", 400);
+                }
                 cart.products.push({ productId, quantity });
             } else {
-                if (quantity <= 0) throw new Error("Quantity must be greater than 0");
+                if (quantity <= 0) {
+                    throw new StatusError("Quantity must be greater than 0", 400);
+                }
                 cart.products[productIndex].quantity += quantity;
             }
+
             const updatedCart = await cart.save();
             return updatedCart;
         } catch (error) {
-            throw error;
+            if (error instanceof StatusError) {
+                throw error;
+            } else {
+                throw new StatusError(error.message, 500);
+            }
         }
     };
 

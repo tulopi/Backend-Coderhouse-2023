@@ -1,6 +1,4 @@
 import { cartController } from "../controllers/cart.controller.js";
-import { cartService } from "../services/cart.services.js";
-import { jwtValidation } from "../middlewares/jwt.middleware.js";
 
 const socketCartServer = (socketServer) => {
     socketServer.on("connection", async (socket) => {
