@@ -1,5 +1,6 @@
 import jwt from "jsonwebtoken";
 import config from "../config/config.js";;
+import { handleServerError } from "../loggers/errorHandler.js";
 
 export const jwtValidation = (req, res, next) => {
     try {
@@ -8,7 +9,7 @@ export const jwtValidation = (req, res, next) => {
         req.user = userToken;
         next();
     } catch (error) {
-        console.log(error);
+        handleServerError(res, error, req);
         next(error);
     }
 };

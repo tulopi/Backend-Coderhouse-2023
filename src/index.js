@@ -11,6 +11,7 @@ import "./config/db/configDB.js";
 import "./config/passport.js";
 import router from "./routes/index.routes.js"
 import notFoundRouter from "./routes/notFOund.router.js";
+import logRouteAccess from "./utils/statusInfo.js";
 
 
 
@@ -23,6 +24,7 @@ app.use(express.json());
 app.use(express.urlencoded({ extended: true }));
 app.use(express.static(__dirname + '/public'));
 app.use(cookieParser());
+app.use(logRouteAccess);
 
 // Session setup
 app.use(

@@ -10,6 +10,6 @@
 Puede ser tanto desde el front como desde el back, es más rápido del front. 
 Se creara una carpeta LOGS la cual mostrara los error.log y warn.log, esta carpeta debe ser agregada al .gitignore.
 
-### -ℹ loggerInfo : Al levantar el servidor y realizar acciones que lo requieran se mostrara [INFO] en consola con los datos.
+### -ℹ loggerInfo : Al levantar el servidor y realizar acciones se mostrara [INFO] en consola con el endpoint y la hora.
 ### -❗loggerWarning: Ejemplo de uso entrar a una ruta inexistente por ejemplo: "http://localhost:8080/products/65417d58a58ef22c0993afd8/asd", mostrara [WARN] en consola con el tipo de advertencia.
 ### -❌ loggerError: Mostrara los errores por consola con [ERROR] más la información de lo que lo esta ocasionando. Ejemplo: se puede borrar cualquier parte del app.js/index.js y guardar para originar un error de este tipo.

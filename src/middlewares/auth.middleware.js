@@ -1,3 +1,5 @@
+import { handleServerError } from "../loggers/errorHandler.js";
+
 export const authMiddleware = (roles) => {
     return (req, res, next) => {
         try {
@@ -9,7 +11,7 @@ export const authMiddleware = (roles) => {
             }
             return res.status(403).json("Not authorized: User role not permitted");
         } catch (error) {
-            console.log(error);
+            handleServerError(res, error, req);
             next(error);
         }
     };
