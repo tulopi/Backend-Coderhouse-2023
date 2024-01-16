@@ -66,3 +66,4 @@
 [2024-01-15T21:18:39.597] [WARN] warn - GET /public/js/addProduct.js - Route not found
 [2024-01-15T21:18:40.863] [WARN] warn - GET /public/js/addProduct.js - Route not found
 [2024-01-15T21:19:21.396] [WARN] warn - GET /src/public/js/addProduct.js - Route not found
+[2024-01-15T21:38:36.531] [WARN] warn - GET /products/65417d58a58ef22c0993afd8/asd - Route not found
