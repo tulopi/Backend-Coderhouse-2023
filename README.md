@@ -8,7 +8,7 @@
 
 ## Modo de uso:
 Puede ser tanto desde el front como desde el back, es más rápido del front. 
-Se creara una carpeta LOGS la cual mostrara los error.log y warn.log, esta carpeta se encuentra agregada al .gitignore.
+Se creara una carpeta LOGS la cual mostrara los error.log y warn.log, esta carpeta debe ser agregada al .gitignore.
 
 -ℹloggerInfo : Al levantar el servidor y realizar acciones que lo requieran se mostrara [INFO] en consola con los datos.
 -loggerWarning: Ejemplo de uso entrar a una ruta inexistente por ejemplo: "http://localhost:8080/products/65417d58a58ef22c0993afd8/asd", mostrara [WARN] en consola con el tipo de advertencia.
