@@ -9,7 +9,11 @@ const router = Router();
 
 // [GET] 🌐/api/users/current
 router.get("/current", jwtValidation, passport.authenticate("jwt", { session: false }),authMiddleware(["user"]),userController.current);
+
 // [GET] 🌐/api/users/tickets
 router.get("/tickets", ticketController.getAllTickets);
+
+// [PUT] 🌐/api/users/premium/:id
+// router.put("/premium/:id", userController.updatePremium);
 
 export default router;

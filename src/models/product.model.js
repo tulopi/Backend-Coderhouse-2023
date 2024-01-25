@@ -30,7 +30,12 @@ const productsSchema = new Schema({
     category:{
         type:String,
         required:true,
-    }
+    },
+    owner: 
+        {
+            type: Schema.Types.ObjectId,
+            ref: "user"
+        }
 })
 
 productsSchema.plugin(mongoosePaginate);

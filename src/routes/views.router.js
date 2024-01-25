@@ -28,10 +28,19 @@ router.get("/signup", viewsController.renderSignup);
 // [GET] 🌐/profile
 router.get("/profile", viewsController.renderProfile);
 
+// [GET] 🌐/change
+router.get("/change", viewsController.renderChange);
+
 // [GET] 🌐/restore
 router.get("/restore", viewsController.renderRestore);
 
+// [GET] 🌐/restart/:id
+router.get("/restart/:id", viewsController.renderRestart);
+
 // [GET] 🌐/error
 router.get("/error", viewsController.renderError);
+
+// [GET] 🌐/
+router.get("/", viewsController.renderProducts)
 
 export default router;

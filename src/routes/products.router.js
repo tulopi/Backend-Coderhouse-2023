@@ -8,7 +8,7 @@ const router = Router();
 // [GET] 🌐/api/products/
 router.get("/", productController.getAllProducts);
 // [POST] 🌐/api/products/
-router.post("/", jwtValidation, adminMiddleware("admin"), productController.createProduct);
+router.post("/", jwtValidation, adminMiddleware(["admin", "premium"]), productController.createProduct);
 // [DELETE] 🌐/api/products/:pid
 router.delete("/:pid", jwtValidation, adminMiddleware("admin"), productController.deleteProduct);
 // [GET] 🌐/api/products/:id

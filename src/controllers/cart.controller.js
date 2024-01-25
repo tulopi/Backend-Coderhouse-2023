@@ -106,7 +106,7 @@ export const cartController = {
             const user = req.user;
             const response = await cartService.purchase(idCart, user)
             const mailOptions = {
-                from: "Coderhouse-Backend",
+                from: "tulo.nv@gmail.com",
                 to: getUser.email,
                 subject: "Purchase done",
                 text: "Your purchase has been processed."

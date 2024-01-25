@@ -11,4 +11,12 @@ export const userController = {
             handleServerError(res, error, req);
         }
     },
+    updatePremium: async (req, res) => {
+        try {
+            const data = await userServices.updatePremium(req);
+            res.json({message: data});
+        } catch (error) {
+            handleServerError(res, error, req);
+        }
+    }
 };

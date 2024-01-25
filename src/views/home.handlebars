@@ -1,10 +1,89 @@
+<!-- Estilos personalizados para la sección de usuario -->
+<style>
+    .user-info {
+        text-align: center;
+        margin-top: 4rem;
+    }
+
+    .user-info h2 {
+        margin-top: 1rem;
+        color: #007bff;
+    }
+
+    .btn-profile {
+        margin-top: 1rem;
+        background-color: #343a40 !important;
+        color: #ffffff !important;
+        border: 1px solid #343a40 !important;
+    }
+
+    .btn-profile:hover {
+        background-color: #1d2124 !important;
+        border: 1px solid #1d2124 !important;
+    }
+</style>
+
 <div class="user-info text-center">
     {{#if user.first_name}}
         <h2 class="mt-4">Welcome {{user.first_name}}</h2>
         <br>
-        <a href="http://localhost:8080/profile" class="btn btn-primary btn-sm">Profile</a>
+        <a href="http://localhost:8080/profile" class="btn btn-primary btn-sm btn-profile">Profile</a>
     {{/if}}
 </div>
+
+<!-- Estilos personalizados para la sección de productos -->
+<style>
+    .product-cards {
+        margin-top: 2rem;
+    }
+
+    .card {
+        border: 1px solid #ccc;
+        border-radius: 5px;
+        background-color: #f8f9fa; /* Fondo de la tarjeta */
+        margin-bottom: 1rem;
+    }
+
+    .card-img-top {
+        border-top-left-radius: 5px;
+        border-top-right-radius: 5px;
+    }
+
+    .card-title {
+        color: #007bff; /* Color del título de la tarjeta */
+    }
+
+    .card-text {
+        margin-bottom: 0.5rem;
+    }
+
+    .btn-see-more {
+        background-color: #343a40 !important;
+        color: #ffffff !important;
+        border: 1px solid #343a40 !important;
+    }
+
+    .btn-see-more:hover {
+        background-color: #1d2124 !important;
+        border: 1px solid #1d2124 !important;
+    }
+
+    .pagination-buttons {
+        margin-top: 2rem;
+    }
+
+    .btn-pagination {
+        margin-right: 1rem;
+        background-color: #343a40 !important;
+        color: #ffffff !important;
+        border: 1px solid #343a40 !important;
+    }
+
+    .btn-pagination:hover {
+        background-color: #1d2124 !important;
+        border: 1px solid #1d2124 !important;
+    }
+</style>
 
 <div class="product-cards container">
     <div class="row">
@@ -23,17 +102,17 @@
                     <p class="card-text">Code: {{code}}</p>
                     <p class="card-text">Stock: {{stock}}</p>
                     <p class="card-text">Category: {{category}}</p>
-                    <button type="button" class="btn btn-primary" id="details"
+                    <button type="button" class="btn btn-primary btn-see-more" id="details"
                         onclick="navigateToDetails('{{_id}}')">See more</button>
                 </div>
             </div>
         </div>
         {{/each}}
     </div>
-    <div class="text-center mb-4">
-        <button type="button" class="btn btn-primary" id="prevPage" onclick="navigateToPage('{{object.prevLink}}')">Previous
+    <div class="text-center pagination-buttons">
+        <button type="button" class="btn btn-primary btn-pagination" id="prevPage" onclick="navigateToPage('{{object.prevLink}}')">Previous
             Page</button>
-        <button type="button" class="btn btn-primary" id="nextPage" onclick="navigateToPage('{{object.nextLink}}')">Next
+        <button type="button" class="btn btn-primary btn-pagination" id="nextPage" onclick="navigateToPage('{{object.nextLink}}')">Next
             Page</button>
     </div>
 </div>

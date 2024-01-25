@@ -1,13 +1,13 @@
-<!-- Estilos personalizados para el formulario de restauración de contraseña -->
+<!-- Estilos personalizados para el formulario de reinicio de contraseña -->
 <style>
-    .restore-container {
+    .restart-container {
         display: flex;
         flex-direction: column;
         align-items: center;
         margin-top: 4rem;
     }
 
-    .restore-card {
+    .restart-card {
         max-width: 400px;
         margin-bottom: 1rem;
         text-align: center;
@@ -45,14 +45,18 @@
     }
 </style>
 
-<div class="restore-container">
-    <div class="card restore-card">
+<div class="restart-container">
+    <div class="card restart-card">
         <div class="card-body">
-            <p class="card-text">Enter your email to receive an email and reset your password.</p>
-            <form class="restore-form" action="api/sessions/restore" method="post">
+            <p class="card-text">Enter your new password below.</p>
+            <form class="restart-form" action="/api/sessions/restart/{{id}}" method="post">
                 <div class="form-group">
-                    <label for="email">Email:</label>
-                    <input type="email" class="form-control" id="email" name="email" placeholder="Enter your email" data-id="email">
+                    <label for="pass">Password:</label>
+                    <input type="password" class="form-control" id="pass" name="pass" placeholder="Enter your new password" data-id="pass">
+                </div>
+                <div class="form-group">
+                    <label for="repeat">Repeat password:</label>
+                    <input type="password" class="form-control" id="repeat" name="repeat" placeholder="Repeat your new password" data-id="repeat">
                 </div>
                 <button type="submit" class="btn btn-primary">Restore password</button>
             </form>

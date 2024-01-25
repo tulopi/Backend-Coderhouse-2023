@@ -1,3 +1,34 @@
+<style>
+    /* Estilos personalizados para los botones */
+    .profile {
+        max-width: 400px; /* Ajusta el ancho del contenedor principal según tus necesidades */
+        margin: auto;
+        padding: 20px;
+        border: 1px solid #ccc;
+        border-radius: 5px;
+        background-color: #f8f9fa; /* Fondo del contenedor principal */
+    }
+
+    .profile h2 {
+        color: #007bff; /* Color del título */
+    }
+
+    .profile-details p {
+        margin-bottom: 10px;
+    }
+
+    .btn-custom {
+        background-color: #343a40; /* Fondo del botón */
+        color: #ffffff; /* Color del texto del botón */
+        border: 1px solid #343a40; /* Borde del botón */
+    }
+
+    .btn-custom:hover {
+        background-color: #5e6266; /* Cambio de color al pasar el mouse */
+        border: 1px solid #1d2124; /* Cambio de color del borde al pasar el mouse */
+    }
+</style>
+
 <div class="profile">
     <h2>Profile</h2>
     <div class="profile-details">
@@ -5,7 +36,13 @@
         <p><strong>Email:</strong> {{user.email}}</p>
     </div>
     <div>
-        <button class="btn btn-primary" onclick="window.location.href = 'api/sessions/signout'">Sign out</button>
+        <button class="btn btn-custom mb-2" onclick="window.location.href = '/change'">Change password</button>
+    </div>
+    <div>
+        <button class="btn btn-custom mb-2" onclick="window.location.href = '/premium'">Upgrade to premium</button>
+    </div>
+    <div>
+        <button class="btn btn-custom" onclick="window.location.href = 'api/sessions/signout'">Sign out</button>
     </div>
 </div>
 

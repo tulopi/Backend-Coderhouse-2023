@@ -76,6 +76,19 @@ export const viewsController = {
         res.render("profile", { user: { first_name, email } });
     },
 
+    renderChange: (req, res) => {
+        res.render("change");
+    },
+
+    renderRestart: (req, res) => {
+        try {
+            const { id } = req.params;
+            res.render("restart", {id});
+        } catch (error) {
+            handleServerError(res, error, req);
+        }
+    },
+
     renderRestore: (req, res) => {
         res.render("restore");
     },
