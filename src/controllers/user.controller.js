@@ -12,11 +12,12 @@ export const userController = {
         }
     },
     updatePremium: async (req, res) => {
+        const {id} = req.params
         try {
-            const data = await userServices.updatePremium(req);
+            const data = await userServices.updatePremium(id);
             res.json({message: data});
         } catch (error) {
-            handleServerError(res, error, req);
+            console.log(error);
         }
     }
 };

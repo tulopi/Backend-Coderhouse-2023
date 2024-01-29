@@ -1,7 +1,7 @@
 import { Router } from "express";
 import viewsController from "../controllers/view.controller.js";
 import { jwtValidation } from "../middlewares/jwt.middleware.js";
-import { authMiddleware } from "../middlewares/auth.middleware.js";
+import { AuthMiddleware } from "../middlewares/auth.middleware.js";
 
 
 
@@ -14,7 +14,7 @@ router.get("/products", viewsController.renderProducts);
 router.get("/products/:pid", viewsController.renderProductDetails);
 
 // [GET] 🌐/chat
-router.get("/chat", jwtValidation, authMiddleware("user"), viewsController.renderChat);
+router.get("/chat", jwtValidation, AuthMiddleware.authorize("user"), viewsController.renderChat);
 
 // [GET] 🌐/carts/:cid
 router.get("/carts/:cid", viewsController.renderCart);
