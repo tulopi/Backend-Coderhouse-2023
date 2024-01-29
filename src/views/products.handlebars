@@ -1,26 +1,76 @@
-<div class="d-flex justify-content-center align-items-center" style="min-height: 100vh;">
-    <div class="card mt-4" style="width: 24rem;">
-        <img src="https://via.placeholder.com/150" class="card-img-top" alt="Product Thumbnail">
-        <div class="card-body">
+<style>
+    /* Estilos personalizados para la sección del producto */
+    .product-section {
+        display: flex;
+        justify-content: center;
+        align-items: center;
+        min-height: 100vh;
+    }
+
+    .product-card {
+        width: 24rem;
+        border: 1px solid #ccc;
+        border-radius: 5px;
+        background-color: #f8f9fa; /* Fondo del producto */
+        margin-top: 4rem;
+    }
+
+    .product-thumbnail {
+        width: 100%;
+        border-top-left-radius: 5px;
+        border-top-right-radius: 5px;
+    }
+
+    .product-card-body {
+        padding: 1.25rem;
+    }
+
+    .product-card-title {
+        color: #007bff; /* Color del título */
+    }
+
+    .product-card-text {
+        margin-bottom: 0.5rem;
+    }
+
+    .product-input-group {
+        margin-top: 1rem;
+    }
+
+    .btn-add-to-cart {
+        background-color: #343a40; /* Fondo del botón */
+        color: #ffffff; /* Color del texto del botón */
+        border: 1px solid #343a40; /* Borde del botón */
+    }
+
+    .btn-add-to-cart:hover {
+        background-color: #3f474d; /* Cambio de color al pasar el mouse */
+        border: 1px solid #1d2124; /* Cambio de color del borde al pasar el mouse */
+    }
+</style>
+
+<div class="d-flex justify-content-center align-items-center product-section">
+    <div class="card product-card">
+        <img src="https://via.placeholder.com/150" class="card-img-top product-thumbnail" alt="Product Thumbnail">
+        <div class="card-body product-card-body">
             <p id="product_id" style="display: none;">{{product._id}}</p>
-            <h5 class="card-title">{{product.title}}</h5>
-            <p class="card-text">{{product.description}}</p>
-            <p class="card-text">${{product.price}}</p>
-            <p class="card-text">{{product.code}}</p>
-            <p class="card-text">Stock: {{product.stock}}</p>
-            <p class="card-text">Category: {{product.category}}</p>
+            <h5 class="card-title product-card-title">{{product.title}}</h5>
+            <p class="card-text product-card-text">{{product.description}}</p>
+            <p class="card-text product-card-text">${{product.price}}</p>
+            <p class="card-text product-card-text">{{product.code}}</p>
+            <p class="card-text product-card-text">Stock: {{product.stock}}</p>
+            <p class="card-text product-card-text">Category: {{product.category}}</p>
             
-            <div class="input-group mb-3">
-            <p id="cartId" style="display: none;">{{cartId}}</p>
+            <div class="input-group mb-3 product-input-group">
+                <p id="cartId" style="display: none;">{{cartId}}</p>
                 <input type="number" id="quantity" class="form-control" placeholder="Quantity" min="1">
                 <div class="input-group-append">
-                    <button id="addToCart" type="button" class="btn btn-primary">Add to cart</button>
+                    <button id="addToCart" type="button" class="btn btn-add-to-cart">Add to cart</button>
                 </div>
             </div>
         </div>
     </div>
 </div>
-
 
 <script type="text/javascript" src="https://cdn.jsdelivr.net/npm/toastify-js"></script>
 <script src="https://cdn.jsdelivr.net/npm/sweetalert2@11"></script>

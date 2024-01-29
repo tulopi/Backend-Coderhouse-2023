@@ -2,6 +2,7 @@ import { productMongo } from "../DAL/dao/product.dao.js";
 import { cartMongo } from "../DAL/dao/cart.dao.js";
 import { MockingProducts } from "../mocks/products.mocks.js";
 import { StatusError } from "../utils/statusError.js";
+import { isValidObjectId } from "mongoose";
 
 export class ProductService {
     async findAll(obj) {
@@ -16,8 +17,19 @@ export class ProductService {
         return productMongo.getSortedQuery(sortField);
     }
 
-    async createOne(product) {
-        return productMongo.createOne(product);
+    async createProduct(user, productData) {
+        try {
+            if (user.role !== 'premium' && user.role !== 'admin') {
+                throw new StatusError("User does not have the required role.", 403);
+            }
+            if (!isValidObjectId(productData.owner)) {
+                throw new StatusError("Owner is not a valid objectId", 400);
+            }
+            const newProduct = await Product.create(productData);
+            return newProduct;
+        } catch (error) {
+            throw new StatusError("Error finding products", 500);
+        }
     }
 
     async findAllLean() {

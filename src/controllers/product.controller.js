@@ -2,6 +2,7 @@ import { productService } from "../services/product.services.js";
 import { StatusError } from "../utils/statusError.js";
 import { logError, logWarning } from "../loggers/index.js";
 import { handleServerError } from "../loggers/errorHandler.js";
+import { userServices } from "../services/user.services.js";
 
 export class ProductController {
     async getAllProducts(req, res) {
@@ -15,7 +16,9 @@ export class ProductController {
 
     async createProduct(req, res) {
         try {
-            const newProduct = await productService.create(req.body);
+            const user = req.user;
+            const productData = req.body;
+            const newProduct = await productService.createProduct({user, productData});
             res.status(200).json({ message: "Product created", product: newProduct });
         } catch (error) {
             handleServerError(res, error, req);
@@ -24,8 +27,11 @@ export class ProductController {
 
     async deleteProduct(req, res) {
         try {
+            const userId = req.user._id;
+            const userRole = req.user.role;
             const productId = req.params.id;
             const product = await productService.findById(productId);
+            if ( product.owner !== userId && userRole !== "admin") throw new StatusError("Only the owner can delete this item", 403);
             const deletedProduct = await productService.deleteOne(product);
             res.status(200).json({ message: "Product deleted", deletedProduct });
         } catch (error) {
@@ -47,6 +53,8 @@ export class ProductController {
         const user = req.user;
         const userFromDB = await userServices.findById(user);
         const { pid } = req.params;
+        const product = await productService.getProductById(pid);
+        if (product.owner === userFromDB._id) throw new StatusError("The owner can't purchase his own products", 403);
         const cid = userFromDB.cart;
         const { quantity } = req.body;
         try {

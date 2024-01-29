@@ -72,8 +72,21 @@ export const viewsController = {
         if (!req.session.passport) {
             return res.redirect("/login");
         }
-        const { first_name, email } = req.user;
-        res.render("profile", { user: { first_name, email } });
+        const { first_name, email, role, _id } = req.user;
+        res.render("profile", { user: { first_name, email, role, _id } });
+    },
+
+    renderChange: (req, res) => {
+        res.render("change");
+    },
+
+    renderRestart: (req, res) => {
+        try {
+            const { id } = req.params;
+            res.render("restart", {id});
+        } catch (error) {
+            handleServerError(res, error, req);
+        }
     },
 
     renderRestore: (req, res) => {

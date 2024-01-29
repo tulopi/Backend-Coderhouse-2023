@@ -1,11 +1,11 @@
 import { Schema, model } from "mongoose";
 
 const userSchema = new Schema({
-    first_name:{
+    first_name: {
         type: String,
         required: true
     },
-    last_name:{
+    last_name: {
         type: String,
         required: true
     },
@@ -13,17 +13,17 @@ const userSchema = new Schema({
         type: Number,
         default: null
     },
-    email:{
+    email: {
         type: String,
         required: true,
         unique: true
     },
-    password:{
+    password: {
         type: String,
     },
     role: {
         type: String,
-        enum: ["admin", "user"],
+        enum: ["admin", "user", "premium"],
         default: "user"
     },
     isGitHub: {
