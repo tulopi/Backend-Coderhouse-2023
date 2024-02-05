@@ -1,9 +1,13 @@
 <!-- Estilos personalizados para la sección de usuario -->
 <style>
-    .user-info {
+    .user-card {
+        border: 1px solid #ccc;
+        border-radius: 10px;
+        box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
+        height: 100px;
         text-align: center;
-        margin-top: 4rem;
     }
+
 
     .user-info h2 {
         margin-top: 1rem;
@@ -23,12 +27,21 @@
     }
 </style>
 
-<div class="user-info text-center">
-    {{#if user.first_name}}
-        <h2 class="mt-4">Welcome {{user.first_name}}</h2>
-        <br>
-        <a href="http://localhost:8080/profile" class="btn btn-primary btn-sm btn-profile">Profile</a>
-    {{/if}}
+<div class="user-card container">
+    <div>
+        <div class="row">
+            <div class="col-md-6">
+                {{#if user.first_name}}
+                    <h3 class="mt-4 p-2">Welcome {{user.first_name}}</h3>
+                {{/if}}
+            </div>
+            <div class="col-md-6 p-3">
+                {{#if user.first_name}}
+                    <button href="http://localhost:8080/profile" class="btn btn-primary btn btn-profile">Profile</button>
+                {{/if}}
+            </div>
+        </div>
+    </div>
 </div>
 
 <!-- Estilos personalizados para la sección de productos -->
