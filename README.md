@@ -13,7 +13,7 @@
 ### // [POST] 🌐/api/sessions/restore // Se envia un mail para reestablecer la contraseña.
 ### // [POST] 🌐/api/sessions/restart/:id // Se valida si existe un token en cookies con una duración de una hora, si es válido se podrá reestablecer la contraseña.
 
-# Entrega 16 📄
+## Entrega 16 📄
 
 ### 🌐  http://localhost:8080 // Se puede ir a la sección de API Documentation para ver toda la documentación de productos.
 ### http://localhost:8080/api/docs/#/
