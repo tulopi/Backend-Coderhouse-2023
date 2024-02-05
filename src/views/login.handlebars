@@ -47,6 +47,16 @@
         background-color: #545b62;
         border: 1px solid #545b62;
     }
+
+    .btn-forgot {
+        background-color: #254563;
+        color: #ffffff;
+        border: 1px solid #343a40;
+    }
+
+    .btn-forgot:hover {
+        background-color: #1d3c52e5;
+    }
 </style>
 
 <div class="login-container">
@@ -62,4 +72,5 @@
         <button type="submit" class="btn btn-primary">Login</button>
     </form>
     <button class="btn btn-secondary" onclick="location.href='/api/sessions/auth/github'">Login with GitHub</button>
+    <button class="btn btn-forgot btn-secondary mt-2"  onclick="location.href='http://localhost:8080/restore'">Restore Access</button>
 </div>
