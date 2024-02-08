@@ -48,7 +48,7 @@ export default class BasicMongo {
 
     async delete(id) {
         try {
-            const deletedItem = await this.model.findByIdAndDelete(id);
+            const deletedItem = await this.model.findOneAndDelete({_id: id});
             if (!deletedItem) {
                 throw new StatusError(`Item with ID ${id} not found`, 404);
             }

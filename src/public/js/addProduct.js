@@ -9,7 +9,16 @@ document.addEventListener("DOMContentLoaded", () => {
         const quantityValue = parseInt(quantity.value);
         if (quantityValue >= 1) {
             const pid = document.getElementById("product_id").textContent;
-            socketClient.emit("addToCart", { pid, quantity : quantityValue, cid: cid.textContent.trim() });
+            
+            if (cid.textContent.trim() !== "") {
+                socketClient.emit("addToCart", { pid, quantity: quantityValue, cid: cid.textContent.trim() });
+            } else {
+                Swal.fire({
+                    icon: "info",
+                    title: "Log in",
+                    text: "You must be logged in to add a product to cart."
+                });
+            }
         } else {
             Swal.fire({
                 icon: "error",
