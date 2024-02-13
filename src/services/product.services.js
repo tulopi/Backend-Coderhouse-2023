@@ -89,28 +89,42 @@ export class ProductService {
     }
   }
   async removeProductFromCart(cid, pid) {
-    const cart = await cartMongo.getById(cid);
-    if (!cart) {
-      throw new StatusError("Cart not found", 404);
+    try {
+      const cart = await cartMongo.getById(cid);
+      
+      if (!cart) {
+        throw new StatusError("Cart not found", 404);
+      }
+  
+      const productIndex = cart.products.findIndex(
+        (item) => item.productId.toString() === pid
+      );
+  
+      if (productIndex === -1) {
+        throw new StatusError("Product not found in the cart", 404);
+      }
+  
+      cart.products.splice(productIndex, 1);
+  
+      const updatedCart = await cart.save();
+      return updatedCart;
+  
+    } catch (error) {
+      if (error instanceof StatusError) {
+        throw error;
+      } else {
+        console.error("Error removing product from cart:", error);
+        throw new StatusError("Internal Server Error", 500);
+      }
     }
-    const productIndex = cart.products.findIndex(
-      (item) => item.productId.toString() === pid
-    );
-    if (productIndex === -1) {
-      throw new StatusError("Product not found in the cart", 404);
-    }
-    cart.products.splice(productIndex, 1);
-    const updatedCart = await cart.save();
-    return updatedCart;
   }
-
   async updateOne(id, product) {
     return productMongo.updateOne(id, product);
   }
 
   async updateProductQuantity(cid, pid, quantity) {
     try {
-      const cart = await cartMongo.findById(cid);
+      const cart = await cartMongo.getById(cid);
 
       if (!cart) {
         throw new StatusError("Cart not found", 404);

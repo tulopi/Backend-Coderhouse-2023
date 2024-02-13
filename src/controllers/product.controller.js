@@ -72,10 +72,7 @@ export class ProductController {
 }
 
   async removeProductFromCart(req, res) {
-    const user = req.user;
-    const userFromDB = await userServices.findById(user);
-    const pid = req.params;
-    const cid = userFromDB.cart;
+    const {cid, pid} = req.params;
     try {
       const updatedCart = await productService.removeProductFromCart(cid, pid);
       res

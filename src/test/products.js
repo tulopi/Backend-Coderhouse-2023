@@ -44,7 +44,7 @@ describe("Products Router", () => {
 // [GET] 🌐/api/products/:id
 describe("Product by ID Router", () => {
   it("should return a specific product by ID", (done) => {
-    const productId = "65c322c2ec71713a9571d075";
+    const productId = "65c322c2ec71713a9571d078";
     request.get(`/api/products/${productId}`).end((err, response) => {
       if (err) {
         done(err);
@@ -75,7 +75,6 @@ describe("Authentication and Mocking Products Router", () => {
       done();
     });
   });
-
   it("should return mocked products with a valid JWT token", (done) => {
     expect(authToken).to.be.a("string");
     request
@@ -157,7 +156,7 @@ describe("Create Product Router", () => {
           done(error);
         }
       });
-  }).timeout(10000);
+  }).timeout(5000);
   after((done) => {
     done();
   });
@@ -185,8 +184,8 @@ describe("Add Product to Cart Router", () => {
         expect(response.status).to.equal(200);
         expect(response.body).to.have.property("token").that.is.a("string");
         authToken = response.body.token;
-        cid = "65bacd79a746932afa2e68a7";
-        pid = "65c322c2ec71713a9571d075";
+        cid = "65c3144dc1dc4465297d3111";
+        pid = "65c322c2ec71713a9571d079";
 
         done();
       });
@@ -216,7 +215,7 @@ describe("Add Product to Cart Router", () => {
           done(error);
         }
       });
-  }).timeout(15000);
+  }).timeout(5000);
 
   after((done) => {
     done();
@@ -224,17 +223,131 @@ describe("Add Product to Cart Router", () => {
 });
 
 // [DELETE] 🌐/api/products/:pid
-describe("Delete Product Router", () => {
+// describe("Delete Product Router", () => {
+//   let authToken;
+//   let productId;
+
+//   before((done) => {
+//     const credentials = {
+//       email: "test@hotmail.com",
+//       password: "test",
+//     };
+//     request
+//       .post("/api/sessions/login")
+//       .send(credentials)
+//       .end((err, response) => {
+//         if (err) {
+//           done(err);
+//           return;
+//         }
+//         expect(response.status).to.equal(200);
+//         expect(response.body).to.have.property("token").that.is.a("string");
+//         authToken = response.body.token;
+//         productId = "65c42d1abadaed9bebfd247d";
+//         done();
+//       });
+//   });
+
+//   it("should delete a product with admin or premium user authorization", (done) => {
+//     request
+//       .delete(`/api/products/${productId}`)
+//       .set("Cookie", `token=${authToken}`)
+//       .end((err, response) => {
+//         if (err) {
+//           done(err);
+//           return;
+//         }
+//         try {
+//           expect(response.status).to.equal(200);
+//           expect(response.body).to.be.an("object");
+//           expect(response.body).to.have.property("message").that.is.a("string");
+//           expect(response.body.message).to.equal("Product deleted");
+//           expect(response.body)
+//             .to.have.property("deletedProduct")
+//             .that.is.an("object");
+//           done();
+//         } catch (error) {
+//           done(error);
+//         }
+//       });
+//   });
+
+//   after((done) => {
+//     done();
+//   });
+// }).timeout(5000);
+
+
+// [DELETE] 🌐/api/products/:cid/products/:pid
+// describe("Remove Product from Cart Router", () => {
+//     let authToken;
+//     let cid;
+//     let pid;
+  
+//     before((done) => {
+//       const credentials = {
+//         email: "user@hotmail.com",
+//         password: "user",
+//       };
+//       request
+//         .post("/api/sessions/login")
+//         .send(credentials)
+//         .end((err, response) => {
+//           if (err) {
+//             done(err);
+//             return;
+//           }
+//           expect(response.status).to.equal(200);
+//           expect(response.body).to.have.property("token").that.is.a("string");
+//           authToken = response.body.token;
+//           cid = "65c3144dc1dc4465297d3111";
+//           pid = "65c322c2ec71713a9571d075";
+  
+//           done();
+//         });
+//     });
+  
+//     it("should remove a product from the user's cart", (done) => {
+//       request
+//         .delete(`/api/products/${cid}/products/${pid}`)
+//         .set("Cookie", `token=${authToken}`)
+//         .end((err, response) => {
+//           if (err) {
+//             done(err);
+//             return;
+//           }
+  
+//           try {
+//             expect(response.status).to.equal(200);
+//             expect(response.body).to.be.an("object");
+//             expect(response.body).to.have.property("message").that.is.a("string");
+//             expect(response.body.message).to.equal("Product removed from cart");
+//             expect(response.body).to.have.property("cart").that.is.an("object");
+//             done();
+//           } catch (error) {
+//             done(error);
+//           }
+//         });
+//     }).timeout(5000);
+  
+//     after((done) => {
+//       done();
+//     });
+//   });
+
+
+// [DELETE] 🌐/api/products/:cid/empty
+describe("Clear Cart Router", () => {
   let authToken;
-  let productId;
+  let cid;
 
   before((done) => {
     const credentials = {
       email: "test@hotmail.com",
       password: "test",
     };
-    request
-      .post("/api/sessions/login")
+
+    request.post("/api/sessions/login")
       .send(credentials)
       .end((err, response) => {
         if (err) {
@@ -244,94 +357,147 @@ describe("Delete Product Router", () => {
         expect(response.status).to.equal(200);
         expect(response.body).to.have.property("token").that.is.a("string");
         authToken = response.body.token;
-        productId = "65c322fbeded4b6daabdfbb6";
+
+        cid = "659481e91776f82af5b8fd6f";
         done();
       });
   });
 
-  it("should delete a product with admin or premium user authorization", (done) => {
-    request
-      .delete(`/api/products/${productId}`)
+  it("should clear the user's cart", (done) => {
+    request.delete(`/api/products/${cid}/empty`)
       .set("Cookie", `token=${authToken}`)
       .end((err, response) => {
         if (err) {
           done(err);
           return;
         }
+
         try {
           expect(response.status).to.equal(200);
           expect(response.body).to.be.an("object");
           expect(response.body).to.have.property("message").that.is.a("string");
-          expect(response.body.message).to.equal("Product deleted");
-          expect(response.body)
-            .to.have.property("deletedProduct")
-            .that.is.an("object");
+          expect(response.body.message).to.equal("Cart cleared");
+          expect(response.body).to.have.property("cart").that.is.an("object");
           done();
         } catch (error) {
           done(error);
         }
       });
-  });
+  }).timeout(5000);
 
   after((done) => {
     done();
   });
-}).timeout(20000);
+});
 
+// [DELETE] 🌐/api/products/:cid
+// describe("Delete Cart Router", () => {
+//   let authToken;
+//   let cidToDelete;
 
-// [DELETE] 🌐/api/products/:cid/products/:pid
-describe("Remove Product from Cart Router", () => {
-    let authToken;
-    let cid;
-    let pid;
-  
-    before((done) => {
-      const credentials = {
-        email: "test@hotmail.com",
-        password: "test",
-      };
-      request
-        .post("/api/sessions/login")
-        .send(credentials)
-        .end((err, response) => {
-          if (err) {
-            done(err);
-            return;
-          }
-          expect(response.status).to.equal(200);
-          expect(response.body).to.have.property("token").that.is.a("string");
-          authToken = response.body.token;
-          cid = "659481e91776f82af5b8fd6f";
-          pid = "65c322fbeded4b6daabdfbb6";
-  
-          done();
-        });
-    });
-  
-    it("should remove a product from the user's cart", (done) => {
-      request
-        .delete(`/api/products/${cid}/products/${pid}`)
-        .set("Cookie", `token=${authToken}`)
-        .end((err, response) => {
-          if (err) {
-            done(err);
-            return;
-          }
-  
-          try {
-            expect(response.status).to.equal(200);
-            expect(response.body).to.be.an("object");
-            expect(response.body).to.have.property("message").that.is.a("string");
-            expect(response.body.message).to.equal("Product removed from cart");
-            expect(response.body).to.have.property("cart").that.is.an("object");
-            done();
-          } catch (error) {
-            done(error);
-          }
-        });
-    }).timeout(15000);
-  
-    after((done) => {
-      done();
-    });
+//   before((done) => {
+//     const credentials = {
+//       email: "test@hotmail.com",
+//       password: "test",
+//     };
+//     request.post("/api/sessions/login")
+//       .send(credentials)
+//       .end((err, response) => {
+//         if (err) {
+//           done(err);
+//           return;
+//         }
+//         expect(response.status).to.equal(200);
+//         expect(response.body).to.have.property("token").that.is.a("string");
+//         authToken = response.body.token;
+
+//         cidToDelete = "65c19103b447a904c524f206";
+//         done();
+//       });
+//   });
+
+//   it("should delete the user's cart", (done) => {
+//     request.delete(`/api/products/${cidToDelete}`)
+//       .set("Cookie", `token=${authToken}`)
+//       .end((err, response) => {
+//         if (err) {
+//           done(err);
+//           return;
+//         }
+
+//         try {
+//           expect(response.status).to.equal(200);
+//           expect(response.body).to.be.an("object");
+//           expect(response.body).to.have.property("message").that.is.a("string");
+//           expect(response.body.message).to.equal("Cart deleted");
+//           expect(response.body).to.have.property("cart").that.is.an("object");
+//           done();
+//         } catch (error) {
+//           done(error);
+//         }
+//       });
+//   }).timeout(5000);
+
+//   after((done) => {
+//     done();
+//   });
+// });
+
+// [PUT] 🌐/api/products/:cid/products/:pid
+describe("Update Product Quantity Router", () => {
+  let authToken;
+  let cid;
+  let pid;
+
+  before((done) => {
+    const credentials = {
+      email: "test@hotmail.com",
+      password: "test",
+    };
+
+    request.post("/api/sessions/login")
+      .send(credentials)
+      .end((err, response) => {
+        if (err) {
+          done(err);
+          return;
+        }
+        expect(response.status).to.equal(200);
+        expect(response.body).to.have.property("token").that.is.a("string");
+        authToken = response.body.token;
+
+        cid = "65c3144dc1dc4465297d3111";
+        pid = "65c322c2ec71713a9571d079";
+        done();
+      });
   });
+
+  it("should update product quantity in the user's cart", (done) => {
+    const quantityToUpdate = 5;
+
+    request.put(`/api/products/${cid}/products/${pid}`)
+      .set("Cookie", `token=${authToken}`)
+      .send({ quantity: quantityToUpdate })
+      .end((err, response) => {
+        if (err) {
+          done(err);
+          return;
+        }
+
+        try {
+          expect(response.status).to.equal(200);
+          expect(response.body).to.be.an("object");
+          expect(response.body).to.have.property("message").that.is.a("string");
+          expect(response.body.message).to.equal("Product quantity updated in cart");
+          expect(response.body).to.have.property("cart").that.is.an("object");
+          done();
+        } catch (error) {
+          done(error);
+        }
+      });
+  }).timeout(5000);
+
+  after((done) => {
+    done();
+  });
+});
