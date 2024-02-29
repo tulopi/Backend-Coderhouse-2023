@@ -46,8 +46,18 @@
     </div>
     <div>
         <button class="btn btn-custom" onclick="window.location.href = 'api/sessions/signout'">Sign out</button>
+
+
+        <form action="/api/users/{{user._id}}/documents" method="post" enctype="multipart/form-data">
+            Cambiar Avatar: <input type="file" name="avatar" id="avatar">
+            Cargar DNI: <input type="file" name="dni" id="dni">
+            Dirección: <input type="file" name="address" id="address">
+            Bank <input type="file" name="bank" id="bank">
+            <input type="submit" value="Enviar">
+        </form>
     </div>
 </div>
+
 
 <script>
     const token = token;

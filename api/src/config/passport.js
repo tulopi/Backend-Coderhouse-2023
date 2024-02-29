@@ -47,6 +47,9 @@ passport.use(
                 if (!user) {
                     done(null, false, { message: "Incorrect email or password." });
                 }
+                const newDate = new Date()
+                user.last_connection = newDate;
+                await user.save()
                 const isPasswordValid = await compareData(password, user.password);
                 if (!isPasswordValid) {
                     return done(null, false, { message: "Incorrect email or password." });
@@ -89,6 +92,9 @@ passport.use(
                     const userDB = await userServices.findOneByEmail(profile.emails[0].value);
                     if (userDB) {
                         if (userDB.isGitHub) {
+                            const newDate = new Date()
+                            userDB.last_connection = newDate;
+                            await userDB.save()
                             return done(null, userDB);
                         } else {
                             return done(null, false);

@@ -1,9 +1,9 @@
 import { CommonModule } from '@angular/common';
 import { Component } from '@angular/core';
 import { RouterLink } from '@angular/router';
-import { ProductsService } from '../../../core/products/products.service';
 import { Products } from '../../../core/products/products.types';
 import { HttpClientModule } from '@angular/common/http';
+import { ProductsService } from '../../../core/products/products.service';
 
 @Component({
   selector: 'app-home',

@@ -6,6 +6,7 @@ import { transporter } from "../utils/nodemailer.js";
 import { hashData } from "../utils/utils.js"
 import { StatusError } from "../utils/statusError.js";
 import { jwtValidation } from "../middlewares/jwt.middleware.js";
+import { usersMongo } from "../DAL/dao/users.dao.js";
 
 export const sessionControler = {
     signup: async (req, res, next) => {
@@ -28,8 +29,13 @@ export const sessionControler = {
                     if (error) {
                         return next(error);
                     }
+                    
                     const { first_name, last_name, role, _id } = user;
                     const token = generateToken({ first_name, last_name, role, _id: _id.toString() });
+                    const newDate = new Date()
+                    const userFromDb =  await usersMongo.getById(req.user._id);
+                    userFromDb.last_connection = newDate;
+                    await userFromDb.save()
                     res.status(200)
                         .cookie("token", token, { httpOnly: true })
                         .json({ token })
@@ -39,7 +45,11 @@ export const sessionControler = {
             }
         })(req, res, next);
     },
-    signout: (req, res) => {
+    signout: async (req, res) => {
+        const newDate = new Date()
+        const userFromDb =  await usersMongo.getById(req.user._id);
+        userFromDb.last_connection = newDate;
+        await userFromDb.save()
         req.session.destroy(() => {
             res.redirect("/login");
         });

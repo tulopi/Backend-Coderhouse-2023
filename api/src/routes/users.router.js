@@ -3,6 +3,7 @@ import { userController } from "../controllers/user.controller.js";
 import { ticketController } from "../controllers/ticket.controller.js";
 import { jwtValidation } from "../middlewares/jwt.middleware.js";
 import { AuthMiddleware } from "../middlewares/auth.middleware.js";
+import upload from "../middlewares/multer.middleware.js";
 import passport from "passport";
 
 const router = Router();
@@ -15,5 +16,14 @@ router.get("/tickets", ticketController.getAllTickets);
 
 // [GET] 🌐/api/users/premium/:id
 router.get("/premium/:id", userController.updatePremium);
+
+// [POST] 🌐/api/users/:id/documents
+router.post("/:id/documents", upload.fields([
+    { name: 'avatar', maxCount: 1 },
+    { name: 'dni', maxCount: 1 },
+    { name: 'address', maxCount: 1 },
+    { name: 'bank', maxCount: 1 },
+])
+,userController.uploadDocument);
 
 export default router;
