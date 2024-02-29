@@ -1,0 +1,61 @@
+<!-- Estilos personalizados para el formulario de restauración de contraseña -->
+<style>
+    .restore-container {
+        display: flex;
+        flex-direction: column;
+        align-items: center;
+        margin-top: 4rem;
+    }
+
+    .restore-card {
+        max-width: 400px;
+        margin-bottom: 1rem;
+        text-align: center;
+        border: 1px solid #ccc;
+        border-radius: 5px;
+        background-color: #f8f9fa; /* Fondo de la tarjeta */
+    }
+
+    .card-body {
+        padding: 1.25rem;
+    }
+
+    .form-group {
+        margin-bottom: 1rem;
+    }
+
+    .form-control {
+        width: 100%;
+        padding: 0.375rem 0.75rem;
+        font-size: 1rem;
+        line-height: 1.5;
+        border-radius: 0.25rem;
+        border: 1px solid #ced4da;
+    }
+
+    .btn-primary {
+        background-color: #343a40;
+        color: #ffffff;
+        border: 1px solid #343a40;
+    }
+
+    .btn-primary:hover {
+        background-color: #1d2124;
+        border: 1px solid #1d2124;
+    }
+</style>
+
+<div class="restore-container">
+    <div class="card restore-card">
+        <div class="card-body">
+            <p class="card-text">Enter your email to receive an email and reset your password.</p>
+            <form class="restore-form" action="api/sessions/restore" method="post">
+                <div class="form-group">
+                    <label for="email">Email:</label>
+                    <input type="email" class="form-control" id="email" name="email" placeholder="Enter your email" data-id="email">
+                </div>
+                <button type="submit" class="btn btn-primary">Restore password</button>
+            </form>
+        </div>
+    </div>
+</div>
