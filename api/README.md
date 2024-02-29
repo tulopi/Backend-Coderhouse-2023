@@ -1,6 +1,10 @@
-# Entrega 16 📄
-
 ## Comandos para usar en terminal:
-### npm test
+### cd api
+### npm start
 
-# Al momento de ejecutar los test los delete pueden volverse tediosos ya que hay que crear un producto que no se utilice en otros test. Utilice testing unitarios.
+## Endpoints
+
+### http://localhost:8080/login / Hacer un login para despues utilizar el siguiente endpoint.
+### http://localhost:8080/profile / Se pueden cargar archivos los cuales se actualizaran al usuario.
+
+## Cada vez que el usuario realice un login o signout se actualizara el campo last_connection.
