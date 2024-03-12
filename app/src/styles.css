@@ -1,1 +1,74 @@
 @import "bootstrap/dist/css/bootstrap.min.css";
+
+.product-section {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  min-height: 100vh;
+}
+
+.product-cards-container {
+  width: 24rem;
+  border: 1px solid #ccc;
+  border-radius: 5px;
+  background-color: #f8f9fa;
+  margin-top: 4rem;
+}
+
+.product-thumbnail {
+  width: 100%;
+  border-top-left-radius: 5px;
+  border-top-right-radius: 5px;
+}
+
+.card {
+  border: 0px;
+  box-shadow: 0 1px 1px rgba(0, 0, 0, 0.11), 0 2px 2px rgba(0, 0, 0, 0.11), 0 4px 4px rgba(0, 0, 0, 0.11), 0 8px 8px rgba(0, 0, 0, 0.11), 0 16px 16px rgba(0, 0, 0, 0.11), 0 32px 32px rgba(0, 0, 0, 0.11);
+  transition: transform 0.2s;
+}
+
+.card:hover {
+  transform: scale(1.03);
+}
+
+.product-card-body {
+  padding: 1.25rem;
+}
+
+.product-card-title {
+  color: #007bff;
+}
+
+.product-card-text {
+  margin-bottom: 0.5rem;
+}
+
+.product-input-group {
+  margin-top: 1rem;
+}
+
+.btn-see-more {
+  background-color: #343a40;
+  color: #ffffff;
+  border: 1px solid #343a40;
+  transition: background-color 0.3s, border 0.3s, color 0.3s;
+}
+
+.btn-see-more:hover {
+  background-color: #3f474d;
+  border: 1px solid #1d2124;
+  color: #ffffff;
+}
+
+.btn-pagination {
+  background-color: #343a40;
+  color: #ffffff;
+  border: 1px solid #343a40;
+  transition: background-color 0.3s, border 0.3s, color 0.3s;
+}
+
+.btn-pagination:hover {
+  background-color: #3f474d;
+  border: 1px solid #1d2124;
+  color: #ffffff;
+}

@@ -1,3 +1,42 @@
-<div>
-  <h2>Bienvenido a la Página Principal</h2>
+<div class="container">
+  <div class="product-cards container">
+    <div class="row">
+  @for(product of productos; track $index) {
+      <div class="col-lg-3 col-md-6 mb-4 mt-4">
+        <div class="card h-100">
+          <img
+            src="https://via.placeholder.com/150"
+            class="card-img-top"
+            alt="Placeholder Thumbnail"
+          />
+          <div class="card-body">
+            <h5 class="card-title">{{ product.title }}</h5>
+            <p class="card-text">Price: {{ product.price }}</p>
+            <p class="card-text">Stock: {{ product.stock }}</p>
+            <p class="card-text">Category: {{ product.category }}</p>
+            <button
+              type="button"
+              class="btn btn-primary btn-see-more"
+              id="details"
+              [routerLink]="['/product',product._id]"
+            >
+              See more
+            </button>
+          </div>
+        </div>
+      </div>
+    }
+  </div>
 </div>
+<div class="text-center pagination-buttons mb-2" [hidden]="!showPaginationButtons">
+  <button type="button" class="btn btn-primary btn-pagination mx-2" id="prevPage">
+    Previous Page
+  </button>
+  <button type="button" class="btn btn-primary btn-pagination mx-2" id="nextPage">
+    Next Page
+  </button>
+</div>
+</div>
+
+
+

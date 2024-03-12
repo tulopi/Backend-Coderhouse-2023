@@ -16,7 +16,7 @@ const ticketSchema = new Schema({
     purchaser:{
         type: Schema.Types.ObjectId,
         ref: "users"
-    }
+    },
 });
 
 export const ticketModel = model("Tickets", ticketSchema)

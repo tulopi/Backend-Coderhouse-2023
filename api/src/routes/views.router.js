@@ -17,7 +17,16 @@ router.get("/products/:pid", viewsController.renderProductDetails);
 router.get("/chat", jwtValidation, AuthMiddleware.authorize("user"), viewsController.renderChat);
 
 // [GET] 🌐/carts/:cid
-router.get("/carts/:cid", viewsController.renderCart);
+router.get("/carts/:cid",  AuthMiddleware.authorize("admin"), viewsController.renderCart);
+
+// [GET] 🌐/users
+router.get("/users",  jwtValidation, AuthMiddleware.authorize("admin"), viewsController.renderUsers);
+
+// [GET] 🌐/profile
+router.get("/profile", viewsController.renderProfile);
+
+// [GET] 🌐/carts/:cid
+router.get("/carts", viewsController.renderCart);
 
 // [GET] 🌐/login
 router.get("/login", viewsController.renderLogin);
@@ -39,6 +48,9 @@ router.get("/restart/:id", viewsController.renderRestart);
 
 // [GET] 🌐/error
 router.get("/error", viewsController.renderError);
+
+// [GET] 🌐/ticket/:id
+router.get("/ticket/:id", viewsController.renderTicket);
 
 // [GET] 🌐/
 router.get("/", viewsController.renderProducts)

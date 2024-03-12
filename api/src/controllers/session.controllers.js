@@ -20,16 +20,15 @@ export const sessionControler = {
         }
     },
     login: async (req, res, next) => {
-        passport.authenticate("login", { session: false }, async (err, user, info) => {
+        passport.authenticate("login", async (err, user, info) => {
             try {
                 if (err || !user) {
                     return res.status(401).json({ message: "Authentication failed" });
                 }
-                req.login(user, { session: false }, async (error) => {
+                req.login(user, async (error) => {
                     if (error) {
                         return next(error);
                     }
-                    
                     const { first_name, last_name, role, _id } = user;
                     const token = generateToken({ first_name, last_name, role, _id: _id.toString() });
                     const newDate = new Date()
@@ -38,7 +37,7 @@ export const sessionControler = {
                     await userFromDb.save()
                     res.status(200)
                         .cookie("token", token, { httpOnly: true })
-                        .json({ token })
+                        .redirect("/profile");
                 });
             } catch (error) {
                 handleServerError(res, error, req);
@@ -46,20 +45,32 @@ export const sessionControler = {
         })(req, res, next);
     },
     signout: async (req, res) => {
-        const newDate = new Date()
-        const userFromDb =  await usersMongo.getById(req.user._id);
-        userFromDb.last_connection = newDate;
-        await userFromDb.save()
-        req.session.destroy(() => {
-            res.redirect("/login");
-        });
-    },
+        try {
+            const newDate = new Date();
+    
+            const userFromDb = await usersMongo.getById(req.user._id);
+            userFromDb.last_connection = newDate;
+            await userFromDb.save();
+            req.session.destroy((err) => {
+                if (err) {
+                    console.error('Error destroying session:', err);
+                    res.status(500).json({ error: 'Internal Server Error' });
+                } else {
+                    res.redirect("/login");
+                }
+            });
+        } catch (error) {
+            console.error('Error during signout:', error);
+            res.status(500).json({ error: 'Internal Server Error' });
+        }
+    }
+    ,
     callback: (req, res) => {
         const { first_name, last_name, role, _id } = req.user;
         const token = generateToken({ first_name, last_name, role, _id: _id.toString() });
         res.status(200)
             .cookie("token", token, { httpOnly: true })
-            .json({ token });
+            .redirect("/profile");
     },
     changePw: async (req, res) => {
         const { email, password } = req.body;

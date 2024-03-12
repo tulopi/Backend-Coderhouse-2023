@@ -1,0 +1,88 @@
+<style>
+    .profile {
+        max-width: 400px;
+        margin: auto;
+        padding: 20px;
+        border: 1px solid #ccc;
+        border-radius: 5px;
+        background-color: #f8f9fa;
+    }
+
+    .profile h2 {
+        color: #007bff;
+    }
+
+    .profile-details p {
+        margin-bottom: 10px;
+    }
+
+    .btn-custom {
+        background-color: #343a40;
+        color: #ffffff;
+        border: 1px solid #343a40;
+
+    }
+
+    .btn-custom:hover {
+        background-color: #5e6266;
+
+        border: 1px solid #1d2124;
+    }
+</style>
+
+
+<div class="container">
+    <div class="text-center">
+        <h3>Lista de usuarios:</h3>
+    </div>
+    {{#each data}}
+    <div class="profile mt-2">
+        <h4>{{first_name}} {{last_name}}</h4>
+        <div class="profile-details">
+            <p>Email: {{email}}</p>
+            <p>Role: {{role}}</p>
+        </div>
+    </div>
+    {{/each}}
+
+
+    <div class="text-center m-3">
+        <button id="deleteUsersBtn" class="btn btn-custom">Eliminar usuarios inactivos</button>
+    </div>
+</div>
+
+<script type="text/javascript" src="https://cdn.jsdelivr.net/npm/toastify-js"></script>
+<script src="https://cdn.jsdelivr.net/npm/sweetalert2@11"></script>
+<script>
+    document.getElementById("deleteUsersBtn").addEventListener("click", function() {
+        fetch("http://localhost:8080/api/users", {
+            method: "DELETE",
+        })
+        .then(response => {
+            if (!response.ok) {
+                throw new Error("Network response was not ok");
+            }
+            return response.json();
+        })
+.then(data => {
+    Swal.fire({
+        icon: 'success',
+        title: 'Success',
+        text: 'Inactive users deleted successfully',
+        showConfirmButton: false
+    });
+
+    setTimeout(function() {
+        location.reload();
+    }, 2500);
+})
+        .catch(error => {
+            console.error("There was a problem with the fetch operation:", error);
+            Swal.fire({
+                icon: 'error',
+                title: 'Error',
+                text: 'There was a problem deleting inactive users'
+            });
+        });
+    });
+</script>

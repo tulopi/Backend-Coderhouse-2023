@@ -9,7 +9,7 @@ export class ProductController {
   async getAllProducts(req, res) {
     try {
       const products = await productService.findAllLean();
-      res.status(200).json({ message: "Products found", products });
+      res.status(200).json({ message: products });
     } catch (error) {
       handleServerError(res, error, req);
     }
@@ -34,7 +34,7 @@ export class ProductController {
       if (product.owner !== userId && userRole !== "admin")
         throw new StatusError("Only the owner can delete this item", 403);
       const deletedProduct = await productMongo.delete(productId);
-      res.status(200).json({ message: "Product deleted", deletedProduct });
+      res.status(200).json({ message: deletedProduct });
     } catch (error) {
       handleServerError(res, error, req);
     }
@@ -44,7 +44,7 @@ export class ProductController {
     try {
       const { id } = req.params;
       const product = await productService.findById(id);
-      res.status(200).json({ message: "Product found", product });
+      res.status(200).json({ message: product });
     } catch (error) {
       handleServerError(res, error, req);
     }

@@ -1,0 +1,25 @@
+{{#if ticketData}}
+<div class="container mt-5">
+    <div class="row">
+        <div class="col-md-6 offset-md-3">
+            <div class="card">
+                <div class="card-header bg-success text-white">
+                    <h4 class="mb-0">Purchase Receipt</h4>
+                </div>
+                <div class="card-body">
+                    <p><strong>Name:</strong> {{ticketData.first_name}} {{ticketData.last_name}}</p>
+                    <p><strong>Email:</strong> {{ticketData.email}}</p>
+                    <p><strong>Ticket Code:</strong> {{ticketData.ticket_code}}</p>
+                    <p><strong>Total Amount:</strong> ${{ticketData.totalAmount}}</p>
+                    <p><strong>Date:</strong> {{ticketData.formattedDate}}</p>
+                    <p><strong>Email Sent To:</strong> {{ticketData.email}}</p>
+                    <p><strong>Payment Method:</strong> Credit Card</p>
+                    <p><strong>Transaction ID:</strong> 123456789</p>
+                    <p class="text-muted mt-3">Thank you for your purchase! An email receipt has been sent to {{ticketData.email}}.</p>
+                    <p class="text-muted">If you have any questions, please contact our support team.</p>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+{{/if}}

@@ -26,6 +26,14 @@ app.use(express.urlencoded({ extended: true }));
 app.use(express.static(__dirname + '/public'));
 app.use(cookieParser());
 app.use(logRouteAccess);
+// Configurar los encabezados CORS
+app.use((req, res, next) => {
+    res.header('Access-Control-Allow-Origin', '*'); // Permitir solicitudes desde cualquier origen
+    res.header('Access-Control-Allow-Methods', 'GET, POST, PUT, DELETE'); // Métodos permitidos
+    res.header('Access-Control-Allow-Headers', 'Content-Type'); // Encabezados permitidos
+    next();
+});
+
 
 // Session setup
 app.use(

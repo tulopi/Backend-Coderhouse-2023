@@ -1,6 +1,7 @@
 import { userServices } from "../services/user.services.js";
 import { handleServerError } from "../loggers/errorHandler.js";
 import { StatusError } from "../utils/statusError.js";
+import { usersMongo } from "../DAL/dao/users.dao.js";
 
 export const userController = {
   current: async (req, res) => {
@@ -27,12 +28,28 @@ export const userController = {
       try {
           const { id } = req.params;
           if(!req.files) throw new StatusError("No req file", 400);
-          console.log(req.files);
-          // Desestructura req.files para obtener los archivos de cada campo
           const { avatar, dni, address, bank } = req.files;
       const data = await userServices.upload(id, avatar, dni, address, bank);
       return res.status(200).json({ message: data});
     } catch (error) {
+      handleServerError(res, error, req);
+    }
+  },
+
+  getAllUsers: async (req, res) => {
+    try{
+      const data = await usersMongo.getAllUsers();
+      return res.status(200).json(data);
+    } catch (error) {
+      handleServerError(res, error, req);
+    }
+  },
+
+  deleteOldUsers: async (req, res) => {
+    try {
+      const data = await usersMongo.softDelete();
+      return res.status(200).json(data)
+    }  catch (error) {
       handleServerError(res, error, req);
     }
   }

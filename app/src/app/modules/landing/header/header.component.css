@@ -1,0 +1,32 @@
+/* styles.css */
+/* Estilo para el enlace de la marca (brand) */
+.navbar-brand {
+  font-weight: bold;
+  font-size: 1.5rem;
+}
+
+/* Estilo para los enlaces de navegación */
+.navbar-nav .nav-link {
+  padding: 0.5rem 1rem;
+  font-size: 1rem;
+}
+
+/* Estilo para el botón de hamburguesa en dispositivos móviles */
+.navbar-toggler-icon {
+  background-color: #fff; /* Color del ícono de hamburguesa */
+}
+
+/* Estilo para la barra de navegación cuando está colapsada en dispositivos móviles */
+@media (max-width: 991px) {
+  .navbar-collapse {
+    background-color: #343a40; /* Color de fondo cuando está colapsada */
+  }
+  .navbar-nav .nav-link {
+    color: #fff; /* Color del texto de enlaces cuando está colapsada */
+  }
+}
+
+.background-navbar {
+  background-image: linear-gradient(60deg, #29323c 0%, #485563 100%);
+  padding: 12px!important;
+}

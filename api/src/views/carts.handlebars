@@ -1,22 +1,144 @@
-{{#each cart.products}}
-<div class="card">
-    <div class="row no-gutters">
-        <div class="col-md-4">
-            <img src="{{this.productId.thumbnail}}" class="card-img" alt="{{this.productId.title}}">
-        </div>
-        <div class="col-md-8">
-            <div class="card-body">
-                <h5 class="card-title">{{this.productId.title}}</h5>
-                <p class="card-text">
-                    <strong>ID:</strong> {{this.productId._id}}<br>
-                    <strong>Description:</strong> {{this.productId.description}}<br>
-                    <strong>Price:</strong> ${{this.productId.price}}<br>
-                    <strong>Code:</strong> {{this.productId.code}}<br>
-                    <strong>Quantity in cart:</strong> {{this.quantity}}<br>
-                    <strong>Category:</strong> {{this.productId.category}}
-                </p>
+<div class="container">
+    <h2 class="text-center mt-3">Your Cart</h2>
+    {{#each cart.products}}
+    <div class="card mx-auto mb-3" style="max-width: 540px;">
+        <div class="row no-gutters">
+            <div class="col-md-4">
+                <img src="{{this.productId.thumbnail}}" class="card-img" alt="{{this.productId.title}}">
+            </div>
+            <div class="col-md-8">
+                <div class="card-body">
+                    <h5 class="card-title">{{this.productId.title}}</h5>
+                    <p class="card-text">
+                        <strong>ID:</strong> {{this.productId._id}}<br>
+                        <strong>Description:</strong> {{this.productId.description}}<br>
+                        <strong>Price:</strong> ${{this.productId.price}}<br>
+                        <strong>Code:</strong> {{this.productId.code}}<br>
+                        <strong>Quantity in cart:</strong> {{this.quantity}}<br>
+                        <strong>Category:</strong> {{this.productId.category}}
+                    </p>
+                    <button class="btn-danger btn delete-from-cart-btn" data-product-id="{{this.productId._id}}"
+                        data-quantity="{{this.quantity}}">
+                        Delete from cart
+                    </button>
+                </div>
             </div>
         </div>
     </div>
+    {{/each}}
+    {{#if cart.products}}
+    <div class="text-center col-md-12">
+        <button class="btn btn-primary">Purchase</button>
+    </div>
+    {{else}}
+    <div class="text-center col-md-12">
+        <p>Your cart is empty, add products to your cart to purchase</p>
+    </div>
+    {{/if}}
 </div>
-{{/each}}
+
+
+<script type="text/javascript" src="https://cdn.jsdelivr.net/npm/toastify-js"></script>
+<script src="https://cdn.jsdelivr.net/npm/sweetalert2@11"></script>
+<script>
+    document.addEventListener("DOMContentLoaded", function () {
+        const cidValue = "{{cid}}";
+        const deleteButtons = document.querySelectorAll('.delete-from-cart-btn');
+
+        deleteButtons.forEach(button => {
+            button.addEventListener('click', function () {
+                const productId = button.getAttribute('data-product-id');
+                const quantity = button.getAttribute('data-quantity');
+
+                const apiUrl = `http://localhost:8080/api/products/${cidValue}/products/${productId}`;
+                const requestData = {
+                    method: 'DELETE',
+                    headers: {
+                        'Content-Type': 'application/json',
+                    },
+                    body: JSON.stringify({
+                        productId: productId,
+                        quantity: quantity,
+                    }),
+                };
+                fetch(apiUrl, requestData)
+                    .then(data => {
+                        // Success case
+                        Swal.fire({
+                            icon: 'success',
+                            title: 'Product Removed',
+                            text: 'The product has been successfully removed from your cart.',
+                        });
+                        setTimeout(function () {
+                            location.reload();
+                        }, 1000);
+                    })
+                    .catch(error => {
+                        Swal.fire({
+                            icon: 'error',
+                            title: 'Error',
+                            text: 'An error occurred while removing the product from your cart.',
+                        });
+                    });
+            });
+        });
+    });
+
+    document.addEventListener("DOMContentLoaded", function () {
+        const purchaseButton = document.querySelector('.btn-primary');
+
+        purchaseButton.addEventListener('click', function () {
+            const cidValue = "{{cid}}";
+            const apiUrl = `http://localhost:8080/api/carts/${cidValue}/purchase`;
+
+            // Muestra una alerta de "Processing" mientras se carga la respuesta
+            Swal.fire({
+                icon: 'info',
+                title: 'Processing',
+                text: 'Please wait while your purchase is being processed...',
+                showConfirmButton: false,
+                allowOutsideClick: false,
+            });
+
+            fetch(apiUrl, {
+                method: 'GET',
+                headers: {
+                    'Content-Type': 'application/json',
+                },
+            })
+                .then(response => {
+                    Swal.close();
+
+                    if (!response.ok) {
+                        return response.json().then(error => Promise.reject(error));
+                    }
+                    return response.json();
+                })
+                .then(data => {
+                    const ticketId = data.response.newTicket._id;
+
+                    setTimeout(() => {
+                        window.location.href = `http://localhost:8080/ticket/${ticketId}`;
+                    }, 2500);
+
+                    Swal.fire({
+                        icon: 'success',
+                        title: 'Purchase Successful',
+                        text: 'Your purchase has been processed successfully. You will be redirected shortly...',
+                        showConfirmButton: false,
+                    })
+                })
+                .catch(error => {
+                    console.error('Error:', error);
+                    if (error) {
+                        Swal.fire({
+                            icon: 'error',
+                            title: 'Not Authorized',
+                            text: 'User role not permitted for this action.',
+                        });
+                    }
+                });
+        });
+    });
+
+</script>

@@ -1,4 +1,5 @@
 import { userModel } from "../../models/user.model.js";
+import { transporter } from "../../utils/nodemailer.js";
 import { StatusError } from "../../utils/statusError.js";
 import BasicMongo from "./basic.dao.js";
 
@@ -66,6 +67,93 @@ class UsersMongo extends BasicMongo {
         { new: true }
       );
       return updatedUser;
+    } catch (error) {
+      throw new StatusError(error.message, 500);
+    }
+  }
+
+  async getAllUsers() {
+    try {
+      const users = await userModel
+        .find()
+        .select("first_name last_name email role")
+        .exec();
+      return users;
+    } catch (error) {
+      throw new StatusError(error.message, 500);
+    }
+  }
+
+  async softDelete() {
+    try {
+      const twoDaysAgo = new Date();
+      twoDaysAgo.setDate(twoDaysAgo.getDate() - 2);
+
+      const users = await userModel.find({
+        last_connection: { $lt: twoDaysAgo },
+      });
+
+      await Promise.all(
+        users.map(async (user) => {
+          const mailOptions = {
+            from: "tulo.nv@gmail.com",
+            to: user.email,
+            subject: "Account Deletion Notification",
+            html: `
+                    <html>
+                        <head>
+                            <style>
+                                body {
+                                    font-family: Arial, sans-serif;
+                                }
+                                .container {
+                                    max-width: 600px;
+                                    margin: 0 auto;
+                                }
+                                .header {
+                                    background-color: #f44336;
+                                    color: white;
+                                    padding: 1em;
+                                    text-align: center;
+                                }
+                                .content {
+                                    padding: 1em;
+                                }
+                                .footer {
+                                    background-color: #f1f1f1;
+                                    padding: 1em;
+                                    text-align: center;
+                                }
+                            </style>
+                        </head>
+                        <body>
+                            <div class="container">
+                                <div class="header">
+                                    <h2>Account Deletion Notification</h2>
+                                </div>
+                                <div class="content">
+                                    <p>Dear ${user.first_name} ${user.last_name},</p>
+                                    <p>We regret to inform you that your account has been deleted due to inactivity.</p>
+                                    <p>If you wish to continue using our service, please feel free to create a new account.</p>
+                                    <p>Thank you for your understanding.</p>
+                                </div>
+                                <div class="footer">
+                                    <p>If you have any questions, please contact our support team.</p>
+                                </div>
+                            </div>
+                        </body>
+                    </html>
+                `,
+          };
+          await transporter.sendMail(mailOptions);
+        })
+      );
+
+      const deletedUsers = await userModel.deleteMany({
+        last_connection: { $lt: twoDaysAgo },
+      });
+
+      return deletedUsers;
     } catch (error) {
       throw new StatusError(error.message, 500);
     }

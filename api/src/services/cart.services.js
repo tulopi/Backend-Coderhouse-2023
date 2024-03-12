@@ -3,6 +3,7 @@ import { productMongo } from "../DAL/dao/product.dao.js";
 import { StatusError } from "../utils/statusError.js";
 import { ticketMongo } from "../DAL/dao/tickets.dao.js";
 import { v4 as uuidv4 } from "uuid";
+import { ObjectId } from "mongodb";
 
 class CartService {
     async updateCart(id, products) {
@@ -22,23 +23,23 @@ class CartService {
         try {
             const cart = await cartMongo.getById(id);
             if (!cart) {
-                throw new StatusError("Cart not found", 404);
+                throw new StatusError('Cart not found', 404);
             }
-
+    
             const cartProducts = cart.products;
-
+    
             let availableProducts = [];
             let unavailableProducts = [];
             let totalAmount = 0;
-
-            for (let item of cartProducts) {
+    
+            for (const item of cartProducts) {
                 const product = await productMongo.getById(item.productId);
-
+    
                 if (!product) {
                     unavailableProducts.push(item);
                     continue;
                 }
-
+    
                 if (product.stock >= item.quantity) {
                     availableProducts.push(item);
                     product.stock -= item.quantity;
@@ -48,33 +49,38 @@ class CartService {
                     unavailableProducts.push(item);
                 }
             }
-
+    
             cart.products = unavailableProducts;
             await cart.save();
-
+    
             if (availableProducts.length > 0) {
                 if (user.role === 'user') {
                     const ticket = {
                         code: uuidv4(),
                         purchase_datetime: new Date(),
                         amount: totalAmount,
-                        purchaser: user
+                        purchaser: user,
                     };
-                    await ticketMongo.createTicket(ticket);
-                    return { availableProducts, totalAmount };
+    
+                    const newTicket = await ticketMongo.createTicket(ticket);
+    
+                    return { newTicket };
                 } else {
                     throw new StatusError('Unauthorized: Only users can purchase.', 401);
                 }
             }
-            return { unavailableProducts };
+            return { message: 'No available products for purchase' };
         } catch (error) {
             if (error instanceof StatusError) {
                 throw error;
             } else {
-                throw new StatusError(error.message, 500);
+                // Cambia el mensaje a algo más descriptivo
+                throw new StatusError('Internal Server Error', 500);
             }
         }
-    };
+    }
+
+
 
     async addProductToCart(cartId, productId, quantity) {
         try {

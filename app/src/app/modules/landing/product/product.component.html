@@ -1,0 +1,41 @@
+@if(product !== undefined) {
+  <div class="container">
+    <div class="row justify-content-center">
+      <div class="col-lg-6 col-md-8 mt-4">
+        <div class="card mb-4">
+          <div class="row g-0">
+            <!-- Imagen a la izquierda -->
+            <div class="col-md-6">
+              <img
+                src="https://via.placeholder.com/150"
+                class="card-img-top img-fluid"
+                alt="Product Thumbnail"
+              />
+            </div>
+            <!-- Texto a la derecha -->
+            <div class="col-md-6">
+              <div class="card-body">
+                <h5 class="card-title">{{ product.title }}</h5>
+                <p class="card-text">{{ product.description }}</p>
+                <ul class="list-unstyled">
+                  <li><strong>Price:</strong> {{ product.price }}</li>
+                  <li><strong>Code:</strong> {{ product.code }}</li>
+                  <li><strong>Stock:</strong> {{ product.stock }}</li>
+                  <li><strong>Category:</strong> {{ product.category }}</li>
+                </ul>
+                <button
+                  type="button"
+                  class="btn btn-primary btn-see-more"
+                  id="purchase"
+                >
+                  Add to Cart
+                </button>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+}
+

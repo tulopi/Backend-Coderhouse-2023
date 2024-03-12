@@ -28,6 +28,29 @@
 
         border: 1px solid #1d2124;
     }
+
+        input[type="file"] {
+        display: block;
+        margin-bottom: 10px;
+        border: 1px solid #ccc;
+        border-radius: 5px;
+        padding: 5px;
+        background-color: #f8f9fa;
+    }
+
+    input[type="submit"] {
+        background-color: #343a40;
+        color: #ffffff;
+        border: 1px solid #343a40;
+        border-radius: 5px;
+        padding: 5px 10px;
+        cursor: pointer;
+    }
+
+    input[type="submit"]:hover {
+        background-color: #5e6266;
+        border: 1px solid #1d2124;
+    }
 </style>
 
 <div class="profile">
@@ -45,8 +68,10 @@
             user/premium</button>
     </div>
     <div>
+        <button class="btn btn-custom mb-2" onclick="window.location.href = '/users'">Manage Users</button>
+    </div>
+    <div>
         <button class="btn btn-custom" onclick="window.location.href = 'api/sessions/signout'">Sign out</button>
-
 
         <form action="/api/users/{{user._id}}/documents" method="post" enctype="multipart/form-data">
             Cambiar Avatar: <input type="file" name="avatar" id="avatar">
@@ -57,6 +82,8 @@
         </form>
     </div>
 </div>
+
+
 
 
 <script>

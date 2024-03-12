@@ -71,33 +71,44 @@ class CartMongo extends BasicMongo {
             const cartId = req.cid;
             const cart = await cartModel.findById(cartId);
             const quantity = req.quantity || 1;
-
-            if (!cart || cart === undefined) {
-                console.log("You must be logged in to buy");
-                throw new StatusError("You must be logged in to buy", 401);
-            }
-
-            if (!product || product === undefined) {
+    
+            if (!cart) {
+                console.log("Cart not found. Creating a new cart.");
                 const newCart = new cartModel({ products: [{ productId: product, quantity }] });
+    
                 if (quantity <= 0) {
                     throw new StatusError("Quantity must be greater than 0", 400);
                 }
+    
                 await newCart.save();
                 return newCart;
             } else {
-                const existingCart = await cartModel.findOne({ _id: cartId });
-                if (quantity <= 0) {
-                    throw new StatusError("Quantity must be greater than 0", 400);
+                const existingProductIndex = cart.products.findIndex(item => item.productId == req.product);
+    
+                if (existingProductIndex !== -1) {
+                    console.log("Product already exists in the cart. Updating quantity.");
+                    if (quantity <= 0) {
+                        throw new StatusError("Quantity must be greater than 0", 400);
+                    }
+    
+                    cart.products[existingProductIndex].quantity += quantity;
+                } else {
+                    console.log("Product not found in the cart. Adding a new product.");
+                    if (quantity <= 0) {
+                        throw new StatusError("Quantity must be greater than 0", 400);
+                    }
+    
+                    cart.products.push({ productId: product, quantity });
                 }
-                existingCart.products.push({ productId: product, quantity });
-                await existingCart.save();
-                return existingCart;
+    
+                await cart.save();
+                return cart;
             }
         } catch (error) {
             throw new StatusError(error.message, 500);
         }
     }
-
+    
     async findAll() {
         try {
             const response = await cartModel.find().populate("products.productId").lean();

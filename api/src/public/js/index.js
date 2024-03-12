@@ -26,7 +26,6 @@ addForm.onsubmit = (event) => {
         code: code.value,
         stock: stock.value,
     }
-    console.log(product);
     socketClient.emit("addProduct", product);
 };
 

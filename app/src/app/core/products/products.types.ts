@@ -7,6 +7,7 @@ export interface Products {
   stock: number;
   category: string;
   owner: string;
+  _id: string;
 }
 
 export interface GetProductsResponse {

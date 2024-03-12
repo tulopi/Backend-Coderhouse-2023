@@ -17,6 +17,9 @@ router.get("/tickets", ticketController.getAllTickets);
 // [GET] 🌐/api/users/premium/:id
 router.get("/premium/:id", userController.updatePremium);
 
+// [GET] 🌐/api/users
+router.get("/", passport.authenticate("jwt", { session: false }),AuthMiddleware.authorize(["admin"]), userController.getAllUsers);
+
 // [POST] 🌐/api/users/:id/documents
 router.post("/:id/documents", upload.fields([
     { name: 'avatar', maxCount: 1 },
@@ -25,5 +28,11 @@ router.post("/:id/documents", upload.fields([
     { name: 'bank', maxCount: 1 },
 ])
 ,userController.uploadDocument);
+
+
+// [DELETE] 🌐/api/users/
+router.delete("/"
+,passport.authenticate("jwt", { session: false }),AuthMiddleware.authorize(["admin"])
+,userController.deleteOldUsers);
 
 export default router;
